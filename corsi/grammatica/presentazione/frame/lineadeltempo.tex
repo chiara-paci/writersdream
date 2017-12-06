@@ -1,0 +1,146 @@
+\newcommand\periodo[4]{
+  \put(#1,0){\line(1,0){#3}}
+  \put(#2,0.2){\mbox{ }\tiny #4}
+  \put(#1,-1.2){\rtesto{5}{1}{\tiny #1}}
+  \put(#2,-1.2){\ltesto{5}{1}{\tiny #2}}
+}
+% 1576-90 conquiste in Iran
+% 1593-1606 guerre con l'Austria
+%  \annoputa{1605-1608}{Rivolta dei Celâlî}
+% 1623-40 riconquiste in mesopotamia
+%1618-48 g. 30anni
+%% 1592-1610 galilei a padova
+\newcommand\annoa[1]{\put(-2,-2){\ctesto{4}{2}{\tiny #1}}}
+\newcommand\annob[1]{\put(-2,-4){\ctesto{4}{2}{\tiny #1}}}
+\newcommand\annoputa[2]{
+  \put(#1,0){
+    \annoa{#1}
+    \put(0,-0.5){\line(0,1){0.75}}
+    \put(-10,0){\ctesto{20}{2}{\tiny #2}}
+  }
+}
+\newcommand\annoputb[2]{
+  \put(#1,0){
+    \annob{#1}
+    \put(0,-2.5){\line(0,1){4.75}}
+    \put(-10,2){\ctesto{20}{2}{\tiny #2}}
+  }
+}
+\newcommand\annoputbb[2]{
+  \put(#1,0){
+    \annoa{#1}
+    \put(0,-0.5){\line(0,1){2.75}}
+    \put(-10,2){\ctesto{20}{2}{\tiny #2}}
+  }
+}
+\newcommand\annoputc[2]{
+  \put(#1,0){
+    \annoa{#1}
+    \put(0,-0.5){\line(0,1){4.75}}
+    \put(-10,4){\ctesto{20}{2}{\tiny #2}}
+  }
+}
+\newcommand\annoputd[2]{
+  \put(#1,0){
+    \annob{#1}
+    \put(0,-2.5){\line(0,1){8.75}}
+    \put(-10,6){\ctesto{20}{2}{\tiny #2}}
+  }
+}
+\newcommand\annoputdd[2]{
+  \put(#1,0){
+    \annoa{#1}
+    \put(0,-0.5){\line(0,1){6.75}}
+    \put(-10,6){\ctesto{20}{2}{\tiny #2}}
+  }
+}
+\newcommand\annopute[2]{
+  \put(#1,0){
+    \annob{#1}
+    \put(0,-2.5){\line(0,1){10.75}}
+    \put(-10,8){\ctesto{20}{2}{\tiny #2}}
+  }
+}
+\setlength{\unitlength}{0.35em}
+\small
+\begin{picture}(82,62)(1559,1)
+\linethickness{0.05mm}\color{black}
+%% \color{griglialcolor}
+%% \linethickness{0.05mm}
+%% \multiput(1559,-1)(1,0){82}{\line(0,1){62}}
+%% \multiput(1559,-1)(0,1){62}{\line(1,0){82}}\color{grigliacolor}
+%% \linethickness{0.05mm}
+%% \multiput(1560,-1)(5,0){17}{\line(0,1){62}}
+%% \multiput(1559,0)(0,5){13}{\line(1,0){82}}\color{black}
+\color{grigio}
+\multiput(1560,-1)(10,0){9}{\line(0,1){62}}
+\color{black}
+\linethickness{0.5mm}
+\put(1557,62){\ctesto{6}{2}{1560}}
+\put(1637,62){\ctesto{6}{2}{1640}}
+\put(1597,62){\ctesto{6}{2}{1600}}
+\color{red}
+\put(1599,0){\line(0,1){60}}
+\put(1598,58){\rtesto{6}{2}{1599}}
+\color{blu}
+\linethickness{0.1mm}
+\put(0,55){
+  \put(1558,4){\scriptsize\it Sultani}
+  \put(1560,0){\line(1,0){80}}
+  \annoputa{1566}{Selim II}
+  \annoputc{1574}{Murad III}
+  \annoputa{1595}{Mehmed III}
+  \annoputc{1603}{Ahmed I}
+  \annoputa{1617}{Mustafa I}
+  \annoputb{1618}{Osman II}
+  \annoputc{1622}{Mustafa I}
+  \annoputd{1623}{Murad IV}
+}
+\color{verde}
+\put(0,40){
+  \put(1558,8){\scriptsize\it Dogi di}
+  \put(1558,6){\scriptsize\it Venezia}
+  \put(1560,0){\line(1,0){80}}
+  \annoputa{1567}{Pietro Loredan}
+  \annoputb{1570}{Alvise Mocenigo}
+  \annoputc{1577}{Sebastiano Venier}
+  \annoputd{1578}{Niccolò da Ponte}
+  \annoputa{1585}{Pasquale Cicogna}
+  \annoputb{1595}{Marino Grimani}
+  \annoputc{1606}{Leonardo Donà}
+  \annoputd{1612}{Marcantonio Memmo}
+  \annoputa{1618}{Nicolo Donà}
+  \annoputbb{1618}{Antonio Priuli}
+  \annopute{1623}{Francesco Contarini}
+  \annoputc{1625}{Giovanni I Corner}
+  \annoputd{1630}{Nicolò Contarini}
+  \annoputa{1631}{Francesco Erizzo}
+}
+\color{black}
+\put(0,25){
+  \put(1560,0){\line(1,0){80}}
+  \annoputc{1565}{assedio di Malta}
+  \annoputa{1571}{Famagosta}
+  \annoputbb{1571}{Lepanto}
+  \annoputd{1581}{\it Gerusalemme Liberata}
+  \annoputc{1582}{calendario gregoriano}
+  \annoputa{1588}{Invincibile Armada}
+  \annoputbb{1594}{\it Romeo e Giulietta}
+  \annoputdd{1600}{morte di Giordano Bruno}
+  \annoputc{1606}{interdetto contro Venezia}
+  \annoputbb{1615}{\it Don Chisciotte}
+  \annoputa{1624}{Nuova Amsterdam}
+  \annoputc{1633}{condanna di Galileo}
+}
+\linethickness{0.2mm}
+\put(0,18){\periodo{1571}{1573}{2}{guerra di Cipro}}
+\put(0,14){\periodo{1576}{1590}{14}{guerre contro la Persia}}
+\put(0,10){\periodo{1593}{1606}{13}{guerre contro l'Austria}}
+\put(0,6){\periodo{1605}{1608}{3}{rivolte dei Celâlî}}
+\put(0,2){
+  \put(1618,0){\line(1,0){22}}
+  \put(1618,0.2){\rtesto{16}{1}{\tiny guerra dei Trent'anni}}
+  \put(1618,-1.2){\rtesto{4}{1}{\tiny 1618}}
+  \put(1640,-1.2){\rtesto{4}{1}{\tiny (1648)}}
+}
+\end{picture}

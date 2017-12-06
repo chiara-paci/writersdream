@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.47 r22583"
+   width="300"
+   height="300"
+   sodipodi:docname="Olympic pictogram Open water swimming.png">
+  <metadata
+     id="metadata8">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs6">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       id="perspective10" />
+  </defs>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="640"
+     inkscape:window-height="502"
+     id="namedview4"
+     showgrid="false"
+     inkscape:zoom="0.78666667"
+     inkscape:cx="150"
+     inkscape:cy="150"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="0"
+     inkscape:current-layer="svg2" />
+  <path
+     style="fill:#000000"
+     d="m 160.01921,240.39562 c -3.01443,-0.81002 -11.56443,-4.34994 -19,-7.86649 -24.33407,-11.50849 -26.70164,-11.48777 -48.527072,0.4246 -9.527434,5.2001 -10.394089,5.47297 -18.634965,5.8672 C 63.945103,239.29511 58.40254,237.78543 44,230.68845 37.562817,227.51647 35.5,226.01463 35.5,224.5 c 0,-2.9801 3.564949,-3.00752 9.357952,-0.072 11.672627,5.91497 19.994873,8.57138 26.918079,8.59211 6.376944,0.0191 7.454656,-0.35045 20.881785,-7.16009 21.230514,-10.76716 26.318644,-10.63938 51.590374,1.2956 23.96396,11.31736 28.38626,11.33858 50.87933,0.24413 7.18298,-3.54292 15.72218,-7.33851 18.97598,-8.43464 11.84751,-3.99113 21.8051,-2.48083 35.3965,5.36871 11.10593,6.4141 17.64958,9.66616 19.44979,9.66616 2.83786,0 5.233,2.36008 4.45437,4.38917 -0.58118,1.51452 -1.51094,1.75702 -5.30443,1.38346 -3.34034,-0.32893 -8.02219,-2.40268 -17.09973,-7.57406 -14.84988,-8.45981 -21.82658,-10.61963 -29.343,-9.08392 -2.83635,0.57951 -12.582,4.61189 -21.657,8.96085 -20.96923,10.04895 -28.05753,11.52405 -39.98079,8.32012 z m 6.86586,-12.77524 c -5.91022,-2.11208 -9.5573,-5.32164 -12.29902,-10.82355 C 147.17404,201.92287 157.56667,186 174.6867,186 c 6.25457,0 14.25709,4.60428 17.64008,10.14927 5.36222,8.78912 4.48828,17.84144 -2.44908,25.36759 -6.15289,6.67509 -14.8975,8.9964 -22.99263,6.10352 z M 130.7245,214.55326 c -6.35641,-5.17789 -16.51258,-16.80956 -20.25882,-23.20203 -3.6511,-6.23014 -5.66451,-14.9111 -4.47104,-19.27729 1.20092,-4.39349 4.45148,-6.7023 17.05274,-12.11225 15.50952,-6.65852 41.67601,-13.57163 43.70175,-11.54589 0.99013,0.99013 -4.36869,5.25526 -14.71808,11.71425 C 132.60079,172.25635 124,178.02166 124,178.91991 c 0,0.52327 4.92478,5.83472 10.94395,11.80322 C 146.32717,202.01053 148,204.59702 148,210.91011 c 0,4.65034 -2.39173,7.06449 -7.70489,7.77713 -3.46042,0.46414 -4.45142,0.0361 -9.57061,-4.13398 z"
+     id="path2818" />
+</svg>

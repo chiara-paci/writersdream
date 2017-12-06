@@ -1,0 +1,39 @@
+\vfill
+
+\definecolor{colora}{RGB}{150,255,150}
+\definecolor{colorb}{RGB}{180,255,180}
+
+\begin{center}
+\begin{footnotesize}
+  \begin{tikzpicture}[x=2mm,y=2mm,node distance=1,
+      box/.style={rounded corners,
+        minimum height=2.2cm,
+        minimum width=1cm,
+        align=center,
+        %text=#1!50!black,
+        text width=2cm,
+        top color=#1!30,
+        bottom color=#1!80,},
+      teoria/.style={box=orange},
+      pratica/.style={box=yellow},
+      veri/.style={box=green},
+      label/.style={rounded corners,
+        align=center,
+        text=#1!50!black,
+        text width=2cm,
+        top color=#1!10,
+        bottom color=#1!50,},
+      labelt/.style={label=orange},     
+      labelp/.style={label=yellow},     
+    ]
+
+    \node[teoria] (teoria)  {modulo per concetti teorici\\(20-30 minuti)};
+    \node[pratica] (pratica) [right=of teoria,text width=4cm]  {modulo per aspetti pratici\\(40-60 minuti)};
+    \node[veri] (casi) at ($(teoria.south)!.66!(pratica.south)+(0,-7)$) [text width=6.4cm] {modulo in cui si affronta un caso di studio\\(60-120 minuti)};
+
+
+  \end{tikzpicture}
+\end{footnotesize}
+\end{center}
+\vfill
+

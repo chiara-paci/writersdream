@@ -1,0 +1,208 @@
+\usepackage[italian]{babel}
+
+\mode
+<presentation>
+{
+  \usetheme{WD}
+  \setbeamercovered{transparent}
+}
+
+\mode
+<all>
+
+\mytitle{Tempi verbali}{I verbi nella narrazione}{La determinazione del tempo}
+
+\myauthor{Chiara Paci}
+
+\myinstitute{Writer's Dream}
+
+\def\myplace{http://www.writersdream.org}
+
+\date{\today}
+%\date{21 gennaio 2015}
+
+\setcounter{tocdepth}{1}
+
+\pgfdeclareimage[height=0.8cm]{plogo}{wdlogo}
+\logo{\pgfuseimage{plogo}}
+
+% \def\banner{banner-zhang.png}
+\def\banner{banner-skylitzes.png}
+
+% Delete this, if you do not want the table of contents to pop up at
+% the beginning of each subsection:
+%% \AtBeginSection[]{
+%%   \begin{frame}<beamer>
+%%     \frametitle{Indice}
+%%     \tableofcontents[sectionstyle=show/shaded,subsectionstyle=hide/hide/hide]
+%%   \end{frame}
+%% }
+
+\mode
+<all>
+
+\newcounter{gridvert}
+\newcounter{gridoriz}
+\newcounter{gridvertlen}
+\newcounter{gridorizlen}
+
+\newcommand\slidegrid[4]{
+    \color{#1}
+    \setcounter{gridoriz}{#3+1}
+    \setcounter{gridvert}{#4+1}
+    \setcounter{gridorizlen}{#3*#2}
+    \setcounter{gridvertlen}{#4*#2}
+    \multiput(0,0)(#2,0){\value{gridoriz}}{\line(0,1){\value{gridvertlen}}}
+    \multiput(0,0)(0,#2){\value{gridvert}}{\line(1,0){\value{gridorizlen}}}
+}
+
+\newcommand\includeimg[3]{\resizebox{#1}{#2}{\includegraphics{#3}}}
+
+\begin{document}
+
+\openpresentazione
+
+\mode
+<all>
+
+\mode
+<article>
+
+In questa  lezione ci occupiamo  di verbi,  in particolare di  come si
+coordinano tra  loro i  tempi verbali a  seconda che  vogliamo narrare
+eventi  contemporanei, anteriori  o  posteriori all'evento  principale
+della scena.
+
+\mode
+<all>
+
+\mysection{Il tempo della narrazione}
+
+\pgfdeclareradialshading{red}{\pgfpoint{0}{0}}%
+                        {rgb(0bp)=(1,0.5,0);
+                          rgb(20bp)=(1,0,0);
+                          rgb(50bp)=(0.7,0,0);
+                          rgb(55bp)=(1,1,1)}
+\pgfdeclareradialshading{green}{\pgfpoint{0}{0}}%
+                        {rgb(0bp)=(0.75,1,0.7);
+                          rgb(20bp)=(0,1,0);
+                          rgb(50bp)=(0,0.7,0);
+                          rgb(55bp)=(1,1,1)}
+\pgfdeclareradialshading{blue}{\pgfpoint{0}{0}}%
+                        {rgb(0bp)=(0.5,0.75,1);
+                          rgb(20bp)=(0,0,1);
+                          rgb(50bp)=(0,0,0.7);
+                          rgb(55bp)=(1,1,1)}
+\pgfdeclareradialshading{yellow}{\pgfpoint{0}{0}}%
+                        {rgb(0bp)=(1,1,1);
+                          rgb(20bp)=(1,1,0);
+                          rgb(50bp)=(1,.75,0);
+                          rgb(55bp)=(1,1,1)}
+                        %\pgfuseshading{red}
+
+
+\begin{tikzfadingfrompicture}[name=fade out 2]
+\shade[shading=radial,rotate=30,
+  inner  color=transparent!0,
+  outer color=transparent!100] % (0,0) circle[x radius=.3,y radius=.1];
+           (5:1.2)--(5:2.2) 
+           arc[radius=2.2,start angle=5,delta angle=110] 
+           -- (5+110:1.2)
+           arc[radius=1.2,start angle=5+110,delta angle=-110] ;
+\end{tikzfadingfrompicture}
+
+\myframe{La scena}{frame:scena}{
+  \setlength{\unitlength}{1.5mm}
+  \begin{center}
+  \begin{tikzpicture}[x=1cm,y=1cm]
+
+    \tikzfading[name=fade out,
+      inner color=transparent!0,
+      outer color=transparent!100]
+
+    \foreach \x/\label/\cs/\op in {30/personaggi/yellow/0,150/luogo/green/0,270/tempo/blue/80} {
+      \begin{scope}[rotate=\x]
+      \begin{scope}[shading=\cs]
+      \path[shade,rounded corners]
+      %\path[draw,rounded corners]
+           [preaction={transform canvas={scale around={1.1:(60+\x:1.5)}},
+                       fill=white!50!black,fit fading=false,
+                       fading transform={shift=(60+\x:1.45),scale=1,rotate=\x-30},
+                       path fading={fade out 2}}] 
+           [preaction={transform canvas={scale=1.06},
+                       fill=white!50!black,fit fading=false,
+                       fading transform={shift=(60+\x:1.45),scale=1,rotate=\x-30},
+                       path fading={fade out 2}}] 
+           (5:1.2)--(5:2.2) 
+           arc[radius=2.2,start angle=5,delta angle=110] 
+           -- (115:1.2)
+           arc[radius=1.2,start angle=5+110,delta angle=-110] 
+           ;
+      \end{scope}
+
+      %\path[draw] (60:1.7) circle [x radius=2,y radius=.5,rotate=-30];
+
+      \path[decorate,decoration={text along path, 
+                                 text align={fit to path},
+                                 text={\label}}] 
+           (+115-20:1.6) arc[radius=1.6,start angle=+115-20,delta angle=-70] ;
+
+      \end{scope}
+    }
+
+    \begin{scope}[shading=red]
+      \path[shade,blur shadow={shadow scale=1.05,shadow xshift=0,shadow yshift=0,shadow opacity=30}] (0,0) circle [radius=1];
+    \end{scope}[shading=red]
+    \draw (0,0) node (azione) {azione};
+
+  \end{tikzpicture}
+  \end{center}
+}
+
+\myframe{I momenti}{frame:momenti}{
+  \begin{itemize}
+    \item momento di riferimento;
+    \item momento dell'enunciazione;
+    \item momento dell'azione.
+  \end{itemize}
+}
+
+\myframe{La localizzazione temporale}{frame:localizzazione}{}
+
+\mysection{I verbi e la narrazione}
+
+\myframe{Il tempo narrativo}{frame:temponarrativo}{}
+
+\myframe{Il sistema verbale italiano}{frame:verbo}{}
+
+\myframe{Perfetto e imperfetto}{frame:aspetto}{}
+
+\myframe{Presente assoluto}{frame:assoluto}{}
+
+\mysection{Schema del passato remoto}
+
+\myframe{Schema complessivo}{frame:passatocomplessivo}
+
+\myframe{Contemporaneità}{frame:passatocontemporaneo}
+
+\myframe{Anteriorità}{frame:passatoanteriore}
+
+\myframe{Posteriorità}{frame:passatoposteriore}
+
+\mysection{Schema del presente}
+
+\myframe{Schema complessivo}{frame:presentecomplessivo}
+
+\myframe{Contemporaneità}{frame:presentecontemporaneo}
+
+\myframe{Anteriorità}{frame:presenteanteriore}
+
+\myframe{Posteriorità}{frame:presenteposteriore}
+
+
+
+\end{document}
+
+
+
+

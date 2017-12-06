@@ -1,0 +1,22 @@
+\vfill
+\begin{center}
+  \begin{tikzpicture}[x=2mm,y=2mm,node distance=1,
+      box/.style={rounded corners,
+        minimum height=3cm,
+        minimum width=2.7cm,
+        align=center,
+        top color=#1!20,
+        text width=2.7cm,
+        bottom color=#1!50,},
+      shell/.style={box=red},
+      action/.style={box=blue},
+      evid/.style={rounded corners,
+        top color=red!20!yellow,
+        bottom color=red},
+    ]
+
+    \node[action] (auto) {automazione di processi};
+    \node[action] (elab) [left=of auto] {elaborazione di dati};
+  \end{tikzpicture}
+\end{center}
+\vfill

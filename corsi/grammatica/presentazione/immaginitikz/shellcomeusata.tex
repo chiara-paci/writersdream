@@ -1,0 +1,34 @@
+\vfill
+\begin{center}
+  \begin{tikzpicture}[x=2mm,y=2mm,node distance=1,
+      box/.style={rounded corners,
+        minimum height=1.2cm,
+        minimum width=2.7cm,
+        align=center,
+        top color=#1!20,
+        text width=2.7cm,
+        bottom color=#1!50,},
+      shell/.style={box=red},
+      action/.style={box=blue},
+      evid/.style={rounded corners,
+        top color=red!20!yellow,
+        bottom color=red},
+    ]
+
+    \node[action] (att sist) {attività sistemistiche};
+    \node[action] (avvio) [left=of att sist] {avvio di programmi};
+    \visible<2->{
+      \node[evid] (att sist evid) [below=of att sist,text width=5mm] {};
+      \node[evid] (avvio evid) [below=of avvio,text width=1mm] {};
+    }
+
+    \node[action] (cron) [below=of att sist evid] {schedulazioni};
+    \node[action] (batch) [below=of avvio evid] {esecuzione di batch};
+
+    \visible<2->{
+      \node[evid] (cron evid) [below=of cron,text width=9mm] {};
+      \node[evid] (batch evid) [below=of batch,text width=25mm] {};
+    }
+  \end{tikzpicture}
+\end{center}
+\vfill

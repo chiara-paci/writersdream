@@ -1,0 +1,32 @@
+\vfill
+
+\definecolor{colora}{RGB}{150,255,150}
+\definecolor{colorb}{RGB}{180,255,180}
+
+\begin{center}
+  \begin{tikzpicture}[x=2mm,y=2mm,node distance=1,
+      box/.style={rounded corners,
+        minimum height=2cm,
+        minimum width=2.7cm,
+        align=center,
+        %text=#1!50!black,
+        top color=#1!30,
+        text width=2.7cm,
+        bottom color=#1!80,},
+      ok/.style={box=green},
+      meglio/.style={box=yellow},
+      obbligo/.style={box=red},
+    ]
+
+    \node[meglio] (base) {strutture base di un linguaggio procedurale};
+    \node[ok] (familiarita) [right=of base] {familiarità con un ambiente Linux/Unix};
+    \node[obbligo] (nessuno) [left=of base] { };
+
+    \node (baseb) [below=of base] {\tiny\it fortemente consigliato};
+    \node (famb) [below=of familiarita] {\tiny\it consigliato};
+    \node (nessunob) [below=of nessuno] {\tiny\it obbligatorio};
+    
+  \end{tikzpicture}
+\end{center}
+\vfill
+

@@ -1,0 +1,50 @@
+\vfill
+
+\definecolor{colora}{RGB}{150,255,150}
+\definecolor{colorb}{RGB}{180,255,180}
+
+\begin{center}
+\begin{footnotesize}
+  \begin{tikzpicture}[x=2mm,y=2mm,node distance=1,
+      box/.style={rounded corners,
+        minimum height=2cm,
+        minimum width=1.5cm,
+        align=center,
+        %text=#1!50!black,
+        top color=#1!30,
+        text width=1.75cm,
+        bottom color=#1!80,},
+      teoria/.style={box=orange},
+      pratica/.style={box=yellow},
+      veri/.style={box=green},
+      label/.style={rounded corners,
+        minimum height=4mm,
+        minimum width=3cm,
+        align=center,
+        text=#1!50!black,
+        top color=#1!10,
+        bottom color=#1!50,},
+      labelt/.style={label=orange},     
+      labelp/.style={label=yellow},     
+    ]
+
+    \node[pratica] (shell) {conoscere il funzionamento della shell};
+    \node[pratica] (comandi) [right=of shell] {conoscere i comandi base};
+    \node[teoria] (regexp) [right=of comandi] {conoscere le espressioni regolari};
+    \node[teoria] (so) [right=of regexp] {approfondire aspetti di Linux/Unix};
+
+    \node[labelp] (pratica) at ($(comandi.north)!.5!(shell.north)+(0,2)$) {\it pratica};
+    \node[labelt] (teoria) at ($(regexp.north)!.5!(so.north)+(0,2)$) {\it teoria};
+
+    \visible<2->{
+      \node (arrow) at ($(comandi.south)!.5!(regexp.south)+(0,-3)$) {\wiconbox{6mm}{clipart/download_manager.png}};
+      
+      \node[veri] (file) [below=of arrow,text width=2cm] {imparare a elaborare file};
+      \node[veri] (mant) [left=of file,text width=2cm] {imparare a scrivere shell script efficienti e mantenibili};
+      \node[veri] (auto) [right=of file,text width=2cm] {imparare ad \\automatizzare task};
+    }
+  \end{tikzpicture}
+\end{footnotesize}
+\end{center}
+\vfill
+

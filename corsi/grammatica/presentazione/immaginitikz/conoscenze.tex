@@ -1,0 +1,62 @@
+\vfill
+
+\definecolor{colora}{RGB}{150,255,150}
+\definecolor{colorb}{RGB}{180,255,180}
+
+\begin{center}
+\begin{footnotesize}
+  \begin{tikzpicture}[x=2mm,y=2mm,node distance=1,
+      box/.style={rounded corners,
+        minimum height=1.5cm,
+        minimum width=1cm,
+        align=center,
+        %text=#1!50!black,
+        text width=2cm,
+        top color=#1!30,
+        bottom color=#1!80,},
+      teoria/.style={box=orange},
+      pratica/.style={box=yellow},
+      veri/.style={box=green},
+      label/.style={rounded corners,
+        align=center,
+        text=#1!50!black,
+        text width=2cm,
+        top color=#1!10,
+        bottom color=#1!50,},
+      labelt/.style={label=orange},     
+      labelp/.style={label=yellow},     
+    ]
+
+    \node[pratica] (usare) {usare la shell};
+    \node[pratica] (usare cmd) [right=of usare] {usare i comandi base};
+    \node[pratica] (combinare) [right=of usare cmd] {combinare i comandi};
+    \node[pratica] (usare re) [right=of combinare] {usare espressioni regolari};
+
+
+    \node[teoria] (shell) [above=of usare] {descrivere la shell};
+    \node[teoria] (comandi) [above=of usare cmd] {descrivere i comandi base};
+    \node[teoria] (regexp) [above=of usare re] {descrivere le espressioni regolari};
+    \node[teoria] (concetti) [above=of combinare] {esporre concetti fondamentali};
+
+    %% \draw[->] (concetti) to (shell);
+    %% \draw[->] (concetti) to (comandi);
+    %% \draw[->] (shell) to (usare);
+    %% \draw[->] (shell) to (combinare);
+    %% \draw[->] (shell) to (usare re);
+    %% \draw[->] (comandi) to (usare cmd);
+    %% \draw[->] (comandi) to (combinare);
+    %% \draw[->] (comandi) to (usare re);
+    %% \draw[->] (regexp) to (usare re);
+
+    \node (arrow) at ($(usare cmd.south)!.5!(combinare.south)+(0,-3)$) {\wiconbox{6mm}{clipart/download_manager.png}};
+
+    \node[veri] (elaborare) [below=of arrow] {elaborare file e dati};
+    \node[veri] (efficienti) [left=of elaborare] {scrivere shell script efficienti e mantenibili};
+    \node[veri] (automatizzare) [right=of elaborare] {automatizzare task};
+
+
+  \end{tikzpicture}
+\end{footnotesize}
+\end{center}
+\vfill
+

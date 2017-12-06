@@ -1,0 +1,307 @@
+\ProvidesPackageRCS $Header: beamerthemeFerentino.sty,v 0.1 2007/04/11 $
+
+\mode<all>
+
+\newif\if@leftsidebar
+\@leftsidebartrue
+
+\if@leftsidebar
+\useoutertheme[hideothersubsections,left,height=20pt,width=4em]{sidebar}
+\else
+\useoutertheme[hideothersubsections,right,height=20pt,width=4em]{sidebar}
+\fi
+
+\useinnertheme{rounded}
+
+\usefonttheme{Ferentino}
+\usecolortheme{Ferentino}
+
+\addtolength{\beamer@headheight}{1em}
+
+\renewenvironment{coverframe}[1]
+{
+    \begingroup
+    \advance\textwidth4em % uguale a width della sidebar
+    \hsize\textwidth
+    \columnwidth\textwidth
+    \setbeamertemplate{navigation symbols}{}
+    \begin{frame}[#1,plain]{}
+}
+{
+    \end{frame}
+    \endgroup
+}
+
+\newlength\framemargin
+\newlength\institutelen
+\newlength\institutewithlogolen
+
+\newcommand\englogopicture{
+\begin{picture}(10,8)(0,0)
+  \put(0.1,0){\includegraphics[width=10\unitlength]{englogo.png}}
+\end{picture}
+}
+
+\newcommand\scuolaurl{
+  \href{http://www.engineeringformazione.it}{www.engineeringformazione.it}
+}
+
+\newlength\trattinolen
+\newlength\barracentralelen
+
+\setlength{\framemargin}{0.5\paperwidth}
+\addtolength{\framemargin}{-0.5\textwidth}
+\setlength{\trattinolen}{\framemargin}
+\addtolength{\trattinolen}{-1mm}
+
+\newlength\centratorelen
+\if@leftsidebar
+\setlength{\centratorelen}{-4em} %% larghezza della sidebar
+\addtolength{\centratorelen}{1.7mm}%
+\else
+\setlength{\centratorelen}{1.7mm}
+\fi
+
+
+\newcommand\centrami{\if@leftsidebar\hspace{\centratorelen}\else\hspace*{\centratorelen}\fi}
+
+\setbeamertemplate{title page}{ 
+  
+  \setlength\trattinolen{10mm}
+  \centrami\parbox{\textwidth}{\centering
+    \setlength{\unitlength}{1pt}
+    \begin{picture}(\strippt\paperwidth,20)(\strippt\framemargin,0)
+      \linethickness{3pt}
+      \usebeamercolor[fg]{rule in head}\put(\strippt\framemargin,0){\line(1,0){\strippt\textwidth}}
+      \usebeamercolor[fg]{trattino}\put(\strippt\framemargin,0){
+        \put(-5,0){\line(-1,0){\strippt\trattinolen}}
+      }
+      %%\put(0,0){\usebeamercolor[bg]{rule in head/foot}\rule{\textwidth}{2pt}}
+    \end{picture}
+
+    %% \vspace{1em}
+    %% {\usebeamercolor{author}\usebeamerfont{author}\insertauthor}
+    %% Horizontal line
+
+    \vspace{2em}
+    
+    {\usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle\par}%
+    
+    {%% Subtitle
+      \ifx\insertsubtitle\@empty%
+      \else%
+      \usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle%\par
+      \fi%  
+    }   
+    
+    %\vspace{.7em}
+    
+    \setlength{\unitlength}{1pt}
+    \begin{picture}(\strippt\paperwidth,100)(\strippt\framemargin,0)
+      \put(0,0){\includegraphics[width=1.1\paperwidth]{\banner}}
+    \end{picture}
+    
+    \vspace{.7em}%
+           {\usebeamercolor{date}\usebeamerfont{date}\myplace, \insertdate}
+
+  }
+
+  \vspace{1em}
+        
+  \setlength{\institutelen}{2.1cm}
+  \setlength{\institutewithlogolen}{\institutelen}
+  \addtolength{\institutewithlogolen}{12mm}
+
+  \setlength{\barracentralelen}{\textwidth}
+  \addtolength{\barracentralelen}{-\institutewithlogolen}
+  \addtolength{\barracentralelen}{-1mm}
+  
+  \setlength\trattinolen{5mm}
+  \centrami\parbox{\textwidth}{
+    \setlength{\unitlength}{1pt}
+    \begin{picture}(\strippt\paperwidth,3)(\strippt\framemargin,0)
+      \linethickness{.1mm}\usebeamercolor[fg]{rule in foot}
+      \put(\strippt\framemargin,0){\put(-3,0){\line(-1,0){\strippt\trattinolen}}}
+      \put(\strippt\framemargin,0){\line(1,0){\strippt\barracentralelen}}\usebeamercolor[fg]{trattino over institute}
+      \put(\strippt\textwidth,0){\put(\strippt\framemargin,0){\line(-1,0){\strippt\institutewithlogolen}}}
+      %%\put(0,0){\usebeamercolor[bg]{rule in head/foot}\rule{\textwidth}{2pt}}
+    \end{picture}
+
+    \raggedleft{
+        \parbox[b]{4cm}{\raggedleft\usebeamercolor[fg]{institute}\usebeamerfont{institute}\scuolaurl}
+        \hspace{1mm}
+        \parbox[m]{\institutewithlogolen}{
+          \parbox[b]{7.7mm}{\setlength{\unitlength}{.7mm}\englogopicture}
+          \parbox[b]{\institutelen}{\usebeamerfont{institute}
+            {\usebeamercolor[fg]{institute}\insertinstitute}
+            
+            \vspace{1mm}
+            \resizebox{\institutelen}{1em}{\usebeamercolor[fg]{engineering}\bf ENGINEERING}}
+      }}
+  }
+}
+
+\newlength\areanosidebarlen
+
+\setbeamertemplate{sidebar \beamer@sidebarside}{
+  \beamer@tempdim=\beamer@sidebarwidth
+  \advance\beamer@tempdim by -6pt
+
+  \setlength\areanosidebarlen\paperwidth
+  \addtolength{\areanosidebarlen}{-\beamer@sidebarwidth}
+
+
+  \vspace{.5em}
+  
+  \insertverticalnavigation{\beamer@sidebarwidth}%
+  \vfill
+
+  \llap{\usebeamertemplate***{navigation symbols}\hskip2cm}
+
+  %% \ifx\beamer@sidebarside\beamer@lefttext%
+  %% \else%
+  %% \usebeamercolor{normal text}%
+  %% \llap{}%
+  %% \vskip2pt%
+  %% \fi%
+  
+%%% posizionare absolute questa roba qua sotto
+  
+%    \vspace{2mm}
+%    {\usebeamercolor[fg]{rule in foot}\rule{\paperwidth}{1pt}}
+%    \vspace{1mm}
+
+    %% \setlength{\institutelen}{\beamer@sidebarwidth}
+    %% \setlength{\institutewithlogolen}{\institutelen}
+    %% \addtolength{\institutewithlogolen}{8mm}
+
+    %% \raggedleft
+    %%     {
+    %%       \rightskip=-\beamer@rightmargin%
+    %%       \parbox[b]{3cm}{\raggedleft\usebeamercolor[fg]{engineering}\usebeamerfont{institute in head/foot}\scuolaurl}
+    %%       \parbox[m]{\institutewithlogolen}{\raggedleft
+    %%         \parbox[b]{5.5mm}{\setlength{\unitlength}{.5mm}\englogopicture}
+    %%         \parbox[b]{\institutelen}{\usebeamerfont{institute in head/foot}
+    %%           {\usebeamercolor[fg]{institute}\insertinstitute}
+    %%           \vspace{1pt}
+
+    %%           \resizebox{\institutelen}{.9em}{\usebeamercolor[fg]{engineering}\bf ENGINEERING}}
+    %%     }}
+    %%     \vspace{.5mm}
+   
+}
+
+\defbeamertemplate*{footline}{uu theme}
+{%
+  \setlength\trattinolen{6mm}
+  \setlength{\institutelen}{2.1cm}
+  \setlength{\institutewithlogolen}{\institutelen}
+  \addtolength{\institutewithlogolen}{8mm}
+  
+  \setlength\barracentralelen\paperwidth
+  \addtolength{\barracentralelen}{-2\trattinolen}
+  \addtolength{\barracentralelen}{-\institutewithlogolen}
+  \addtolength{\barracentralelen}{-25pt}
+
+  \leavevmode%
+  \hbox{%
+    \begin{beamercolorbox}[wd=\beamer@sidebarwidth,ht=25pt,dp=1ex,leftskip=5pt]{page number in head/foot}%
+      \ifbeamer@nonumbers%
+      \else%
+      \usebeamerfont{page number in head/foot}%
+      \parbox{\trattinolen}{\raggedleft\insertframenumber}%
+      \fi%
+      \vspace{10pt}
+    \end{beamercolorbox}%
+    \hspace{-\beamer@sidebarwidth}\hspace{\trattinolen}\hspace{10pt}%
+    \begin{beamercolorbox}[wd=\paperwidth,ht=25pt,dp=1ex,leftskip=5pt,rightskip=5pt]{institute in head/foot}%
+      \parbox[m]{\barracentralelen}{\centering\usebeamercolor[fg]{institute}\usebeamerfont{institute in head/foot}\scuolaurl}%
+          \hspace{10pt}\parbox[m]{\institutewithlogolen}{\raggedleft
+            \parbox[b]{5.5mm}{\setlength{\unitlength}{.5mm}\englogopicture}
+            \parbox[b]{\institutelen}{\usebeamerfont{institute in head/foot}
+              {\usebeamercolor[fg]{institute}\insertinstitute}
+              \vspace{1pt}
+              
+              \resizebox{\institutelen}{.9em}{\usebeamercolor[fg]{engineering}\bf ENGINEERING}}
+            }
+        \vspace{.5mm}
+    \end{beamercolorbox}
+
+  }%
+
+    % s=5
+    \setlength{\unitlength}{1pt}
+    \begin{picture}(0,0)(0,-20)
+      \linethickness{.1mm}%
+      \usebeamercolor[fg]{rule in foot}%
+      \put(5,0){\line(1,0){\strippt\trattinolen}}%
+      \put(\strippt\trattinolen,0){%
+        \put(10,5){\line(0,-1){20}}%
+        \put(15,0){\line(1,0){\strippt\barracentralelen}}%
+        \put(\strippt\barracentralelen,0){
+          \usebeamercolor[fg]{trattino over institute}%
+          \put(20,5){\line(0,-1){20}}%
+          \usebeamercolor[fg]{rule in foot}%
+          \put(25,0){\line(1,0){\strippt\institutewithlogolen}}
+        }
+      }
+  
+      %%\put(0,0){\usebeamercolor[bg]{rule in head/foot}\rule{\textwidth}{2pt}}
+    \end{picture}
+  \vskip0pt%
+}
+
+
+\defbeamertemplate*{frametitle}{Ferentino theme}{%
+  \nointerlineskip%
+  \vskip-\beamer@headheight%
+  \setlength\areanosidebarlen\paperwidth
+  \addtolength{\areanosidebarlen}{-\beamer@sidebarwidth}
+  \vbox to \beamer@headheight{%
+    \vfil
+    \mbox{ }\vspace{.6mm}
+
+    \leftskip=-\beamer@leftmargin%
+    {\usebeamercolor[fg]{frametitle}\usebeamerfont{frametitle}\hspace{5mm}\insertframetitle\par}%
+    {\usebeamercolor[fg]{framesubtitle}\usebeamerfont{framesubtitle}\hspace{5mm}\insertframesubtitle\par}%
+    \vbox{}%
+    \vfil
+  }
+}
+
+\newlength\titlebarlen
+
+\defbeamertemplate*{headline}{Ferentino theme}
+  {%
+    \begin{beamercolorbox}[wd=\paperwidth]{frametitle}
+      \ifx\beamer@sidebarside\beamer@lefttext%
+      \else%
+        \hfill%
+      \fi%
+      \usebeamercolor[bg]{logo}%
+      \vrule width\beamer@sidebarwidth height \beamer@headheight%
+      \hskip-\beamer@sidebarwidth%
+      \hbox to \beamer@sidebarwidth{\hss\vbox to
+        \beamer@headheight{\vss\hbox{\color{fg}\insertlogo}\vss}\hss}%
+    \end{beamercolorbox}
+
+    \setlength\areanosidebarlen\paperwidth
+    \addtolength{\areanosidebarlen}{-\beamer@sidebarwidth}
+    \addtolength{\areanosidebarlen}{-.5pt}
+
+    \setlength\trattinolen{6mm}
+
+    \setlength\titlebarlen\paperwidth
+    \addtolength{\titlebarlen}{-2\trattinolen}
+    \addtolength{\titlebarlen}{-20pt} % s=5
+    
+    \setlength{\unitlength}{1pt}
+    %\begin{picture}(\strippt\paperwidth,3)(\strippt\framemargin,0)
+    \begin{picture}(\strippt\paperwidth,0)(0,0)
+      \linethickness{3pt}\usebeamercolor[fg]{trattino}
+      \put(5,0){\line(1,0){\strippt\trattinolen}}\usebeamercolor[fg]{rule in head}
+      \put(\strippt\trattinolen,0){\put(10,0){\line(1,0){\strippt\titlebarlen}}}
+    \end{picture}
+  }
+
+

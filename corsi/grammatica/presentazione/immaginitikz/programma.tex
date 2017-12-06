@@ -1,0 +1,49 @@
+\vfill
+
+\definecolor{colora}{RGB}{150,255,150}
+\definecolor{colorb}{RGB}{180,255,180}
+
+\begin{center}
+\begin{footnotesize}
+  \begin{tikzpicture}[x=2mm,y=2mm,node distance=1,
+      box/.style={rounded corners,
+        minimum height=1.5cm,
+        minimum width=1cm,
+        align=center,
+        %text=#1!50!black,
+        text width=2cm,
+        top color=#1!30,
+        bottom color=#1!80,},
+      teoria/.style={box=orange},
+      pratica/.style={box=yellow},
+      veri/.style={box=green},
+      label/.style={rounded corners,
+        align=center,
+        text=#1!50!black,
+        text width=2cm,
+        top color=#1!10,
+        bottom color=#1!50,},
+      labelt/.style={label=orange},     
+      labelp/.style={label=yellow},     
+    ]
+
+    \node[pratica] (linguaggio)  {la shell come linguaggio};
+    \node[pratica] (orchestratore) [right=of linguaggio] {la shell come orchestratore};
+    \node[pratica] (comandi) [right=of orchestratore] {comandi base};
+    \node[pratica] (awksed) [right=of comandi] {awk\\sed};
+
+    \node[teoria] (shell) at ($(linguaggio.north)!.5!(orchestratore.north)+(0,5)$)  {il ruolo della shell};
+    \node[teoria] (concetti) [right=of shell] {concetti base di Linux/Unix};
+    \node[teoria] (regexp) [right=of concetti] {espressioni regolari};
+
+
+    \node[veri] (efficienti) at ($(linguaggio.south)!.5!(orchestratore.south)+(0,-5)$)  {best practice};
+    \node[veri] (elaborare) [right=of efficienti] {casi di studio: elaborare file};
+    \node[veri] (automatizzare) [right=of elaborare] {casi di studio: automatizzare};
+
+
+  \end{tikzpicture}
+\end{footnotesize}
+\end{center}
+\vfill
+

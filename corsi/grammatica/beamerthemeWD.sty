@@ -1,0 +1,129 @@
+\ProvidesPackageRCS $Header: beamerthemeWD.sty,v 0.1 2007/04/11 $
+
+\mode<all>
+
+\newif\if@leftsidebar
+\@leftsidebartrue
+
+\if@leftsidebar
+\useoutertheme[hideothersubsections,left,height=20pt,width=4em]{sidebar}
+\else
+\useoutertheme[hideothersubsections,right,height=20pt,width=4em]{sidebar}
+\fi
+
+\useinnertheme{rounded}
+
+\usefonttheme{WD}
+\usecolortheme{WD}
+
+\addtolength{\beamer@headheight}{1em}
+
+\renewenvironment{coverframe}[1]
+{
+    \begingroup
+    \advance\textwidth4em % uguale a width della sidebar
+    \hsize\textwidth
+    \columnwidth\textwidth
+    \setbeamertemplate{navigation symbols}{}
+    \begin{frame}[#1,plain]{}
+}
+{
+    \end{frame}
+    \endgroup
+}
+
+\newlength\framemargin
+\newlength\institutelen
+\newlength\institutewithlogolen
+
+\newcommand\wdlogopicture{
+\begin{picture}(10,8)(0,0)
+  \put(0.1,0){\includegraphics[width=10\unitlength]{wdlogo.png}}
+\end{picture}
+}
+
+\newcommand\scuolaurl{
+  \href{http://www.wriersdream.org}{www.wriersdream.org}
+}
+
+\newlength\trattinolen
+\newlength\barracentralelen
+
+\setlength{\framemargin}{0.5\paperwidth}
+\addtolength{\framemargin}{-0.5\textwidth}
+\setlength{\trattinolen}{\framemargin}
+\addtolength{\trattinolen}{-1mm}
+
+\newlength\centratorelen
+\if@leftsidebar
+\setlength{\centratorelen}{-4em} %% larghezza della sidebar
+\addtolength{\centratorelen}{1.7mm}%
+\else
+\setlength{\centratorelen}{1.7mm}
+\fi
+
+
+\newcommand\centrami{\if@leftsidebar\hspace{\centratorelen}\else\hspace*{\centratorelen}\fi}
+
+\setbeamertemplate{title page}{ 
+  \noindent\centrami\parbox{\textwidth}{\centering
+    \begin{center}
+      {\noindent\usebeamercolor[fg]{date}\usebeamerfont{date}
+        \parbox[m]{4cm}{\centering\insertinstitute}
+        \parbox[m]{2cm}{\centering\setlength{\unitlength}{.7mm}\wdlogopicture}
+        \parbox[m]{4cm}{\centering\insertdate}
+      }
+    \end{center}
+    \setlength{\unitlength}{1pt}
+    \begin{picture}(\strippt\paperwidth,200)(\strippt\framemargin,0)
+      \put(0,0){\includegraphics[width=1.1\paperwidth]{\banner}}
+      \put(34,60){\pgfsetfillopacity{0.65}
+        \begin{beamercolorbox}[wd=\paperwidth]{title}
+          \vspace{3mm}
+          \begin{center}
+            \pgfsetfillopacity{1}
+
+            \noindent{\usebeamerfont{author}\insertauthor}
+            
+            {\noindent\usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle\par}%
+            
+            {%% Subtitle
+              \ifx\insertsubtitle\@empty%
+              \else%
+              \noindent\usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle%\par
+              \fi%  
+            }   
+          \end{center}
+          \vspace{2mm}
+      \end{beamercolorbox}}
+    \end{picture}
+    
+    \begin{center}
+      {\noindent\usebeamercolor[fg]{date}\usebeamerfont{date}
+        \noindent{\centering\myplace}
+      }
+    \end{center}
+  }
+
+}
+
+\newlength\areanosidebarlen
+
+\defbeamertemplate*{frametitle}{WD theme}{%
+  \nointerlineskip%
+  \vskip-\beamer@headheight%
+  \setlength\areanosidebarlen\paperwidth
+  \addtolength{\areanosidebarlen}{-\beamer@sidebarwidth}
+  \vbox to \beamer@headheight{%
+    \vfil
+    \mbox{ }\vspace{.6mm}
+
+    \leftskip=-\beamer@leftmargin%
+    {\usebeamercolor[fg]{frametitle}\usebeamerfont{frametitle}\hspace{5mm}\insertframetitle\par}%
+    {\usebeamercolor[fg]{framesubtitle}\usebeamerfont{framesubtitle}\hspace{5mm}\insertframesubtitle\par}%
+    \vbox{}%
+    \vfil
+  }
+}
+
+

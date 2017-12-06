@@ -1,0 +1,44 @@
+\vfill
+
+\definecolor{colora}{RGB}{150,255,150}
+\definecolor{colorb}{RGB}{180,255,180}
+
+\begin{center}
+  \begin{tikzpicture}[x=2mm,y=2mm,node distance=1,
+      box/.style={rounded corners,
+        minimum height=2cm,
+        minimum width=2.7cm,
+        align=center,
+        %text=#1!50!black,
+        top color=#1!20,
+        text width=2.7cm,
+        bottom color=#1!50,},
+      ok/.style={box=green},
+      forse/.style={box=colora},
+      dovrebbe/.style={rounded corners,
+        minimum height=2cm,
+        minimum width=2.7cm,
+        text width=5cm,
+        align=center,
+        text=black,
+        top color=red!20!yellow,
+        bottom color=red,},
+      esempi/.style={rounded corners,
+        minimum width=2.5cm,
+        align=center,
+        text=black},
+    ]
+
+    \node[ok] (admin) {amministratori \\unix/linux};
+    \node[forse] (utenti) [right=of admin] {utenti \\unix/linux};
+    \node[forse] (programmatori) [right=of utenti] {programmatori};
+
+    \node (step) [below=of utenti] { };
+
+    \only<2->{ \node[dovrebbe] (dovrebbe) [below=of step] {chi necessita di automatizzare processi ed elaborare file} };
+
+    
+  \end{tikzpicture}
+\end{center}
+\vfill
+

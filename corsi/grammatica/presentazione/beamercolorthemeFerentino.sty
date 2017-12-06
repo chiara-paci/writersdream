@@ -1,0 +1,140 @@
+\ProvidesPackage{beamercolorthemeFerentino}[2015/12/18]
+
+
+%% #####  Color Palette by Paletton.com
+%% #####  Palette URL: http://paletton.com/#uid=35q1g0kubqVjUxAp7ufw9lLErgG
+
+
+%% *** Primary color:
+
+%%    shade 0 = #C10B3F = rgb(193, 11, 63) = rgba(193, 11, 63,1) = rgb0(0.757,0.043,0.247) rosso Eng
+%%    shade 1 = #E75780 = rgb(231, 87,128) = rgba(231, 87,128,1) = rgb0(0.906,0.341,0.502)
+%%    shade 2 = #D92F5F = rgb(217, 47, 95) = rgba(217, 47, 95,1) = rgb0(0.851,0.184,0.373)
+%%    shade 3 = #9C002D = rgb(156,  0, 45) = rgba(156,  0, 45,1) = rgb0(0.612,0,0.176)
+%%    shade 4 = #780022 = rgb(120,  0, 34) = rgba(120,  0, 34,1) = rgb0(0.471,0,0.133)
+
+%% *** Secondary color (1):
+
+%%    shade 0 = #D6AF0C = rgb(214,175, 12) = rgba(214,175, 12,1) = rgb0(0.839,0.686,0.047)
+%%    shade 1 = #FFE060 = rgb(255,224, 96) = rgba(255,224, 96,1) = rgb0(1,0.878,0.376)
+%%    shade 2 = #F1CD34 = rgb(241,205, 52) = rgba(241,205, 52,1) = rgb0(0.945,0.804,0.204)
+%%    shade 3 = #AD8C00 = rgb(173,140,  0) = rgba(173,140,  0,1) = rgb0(0.678,0.549,0)
+%%    shade 4 = #856B00 = rgb(133,107,  0) = rgba(133,107,  0,1) = rgb0(0.522,0.42,0)
+
+%% *** Secondary color (2):
+
+%%    shade 0 = #193192 = rgb( 25, 49,146) = rgba( 25, 49,146,1) = rgb0(0.098,0.192,0.573)
+%%    shade 1 = #5064B2 = rgb( 80,100,178) = rgba( 80,100,178,1) = rgb0(0.314,0.392,0.698)
+%%    shade 2 = #3349A4 = rgb( 51, 73,164) = rgba( 51, 73,164,1) = rgb0(0.2,0.286,0.643)
+%%    shade 3 = #0E2376 = rgb( 14, 35,118) = rgba( 14, 35,118,1) = rgb0(0.055,0.137,0.463)
+%%    shade 4 = #08185A = rgb(  8, 24, 90) = rgba(  8, 24, 90,1) = rgb0(0.031,0.094,0.353) blu eng
+
+
+%% ------------------------------------------------------
+%% Outer theme colors
+%% ------------------------------------------------------
+
+
+\usecolortheme[RGB={196,0,74}]{structure}
+
+
+%% ------------------------------------------------------
+%% Inner theme colors
+%% ------------------------------------------------------
+%\usecolortheme{orchid}
+
+%% ------------------------------------------------------
+%% Beamer mode
+%% ------------------------------------------------------
+
+\definecolor{engred}{RGB}{196,00,74}
+\definecolor{engblue}{RGB}{1,47,83}
+\definecolor{englightgrey}{RGB}{230,230,230}
+\definecolor{engmidgrey}{RGB}{178,178,178}
+\definecolor{engdarkgrey}{RGB}{90,90,90}
+
+\definecolor{giallopallido}{rgb}{1.0,1.0,0.8}
+\definecolor{giallino}{rgb}{1.0,1.0,0.9}
+\definecolor{giallo}{rgb}{1.0,1.0,0.5}
+\definecolor{marrone}{rgb}{0.5,0.4,0.2}
+\definecolor{rosso}{rgb}{0.5,0,0}
+\definecolor{verde}{rgb}{0,0.5,0}
+
+
+% ca!x!cb=x% ca + (100-x)% cb
+
+%\setbeamercolor{alerted text}{fg=red}
+
+%\setbeamercolor{palette primary}{fg=engred,bg=white}
+\setbeamercolor{palette secondary}{fg=engred,bg=black!18}
+%\setbeamercolor{palette tertiary}{fg=engred}
+%\setbeamercolor{palette quaternary}{fg=engred}
+
+%% \setbeamercolor{palette frametitle primary}{fg=red}
+%% \setbeamercolor{palette frametitle secondary}{fg=green}
+%% \setbeamercolor{palette frametitle tertiary}{fg=blue}
+%% \setbeamercolor{palette frametitle quaternary}{fg=yellow}
+
+\setbeamercolor{sidebar}{fg=black,bg=black!18}
+
+
+% menu sidebar
+\setbeamercolor{palette sidebar primary}{fg=black,bg=white}
+
+\setbeamercolor{palette sidebar secondary}{fg=black,bg=white}
+
+% autore sidebar
+\setbeamercolor{palette sidebar tertiary}{fg=engred!50!black,bg=engred}
+
+% presentation title
+\setbeamercolor{palette sidebar quaternary}{fg=engred,bg=white}
+
+\setbeamercolor{page number in head/foot}{parent=palette secondary}
+
+\setbeamercolor{institute}{fg=black}
+\setbeamercolor{engineering}{fg=black!32}
+
+\setbeamercolor{frametitle}{fg=black,bg=white}
+
+\setbeamercolor{title in head/foot}{parent=palette sidebar primary}
+\setbeamercolor{rule in head}{fg=black!30,bg=white}
+\setbeamercolor{rule in foot}{fg=black!50,bg=white}
+\setbeamercolor{trattino}{fg=engred,bg=white}
+\setbeamercolor{trattino over institute}{fg=engred,bg=white}
+\setbeamercolor{section in toc}{fg=black,bg=white}
+
+
+%% %% ------------------------------------------------------
+%% %% Handout mode
+%% %% ------------------------------------------------------
+%% \mode
+%% <handout>
+
+%% \usecolortheme{whale}
+%% \setbeamercolor*{title}{fg=engred,bg=white}
+
+
+%% %% ------------------------------------------------------
+%% %% Trans mode
+%% %% ------------------------------------------------------
+%% \mode
+%% <trans>
+
+%% %\usecolortheme{whale}
+%% \setbeamercolor*{title}{fg=black,bg=white}
+%% \setbeamercolor*{subtitle}{fg=black,bg=white}
+%% \setbeamercolor{frametitle}{fg=black,bg=white}
+%% \setbeamercolor{framesubtitle}{fg=black,bg=white}
+
+%% \mode
+%% <all>
+
+%% \setbeamercolor*{block title alerted}{bg=black,fg=white}
+
+%% %% Background logo
+%% \setbeamercolor{logo}{bg=engred}
+
+%% %% Button
+%% \setbeamercolor{button}{fg=black,bg=yellow}
+%% \setbeamercolor{button border}{fg=black,bg=engred}
+%% % the foreground of this color is used to render the border of buttons

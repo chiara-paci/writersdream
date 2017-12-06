@@ -1,0 +1,198 @@
+\mode
+<article>
+
+Questa è la presentazione del corso {\it Shell scripting e automazione
+in ambienti Linux/Unix}.  Lo scopo dell'intervento è presentare
+l'argomento del corso, le esigenze a cui risponde, gli obbiettivi e i
+destinatari e la modalità di svolgimento e fruizione.
+
+
+\mode
+<all>
+
+\mysection{L'argomento del corso}
+
+
+\newcounter{gridvert}
+\newcounter{gridoriz}
+\newcounter{gridvertlen}
+\newcounter{gridorizlen}
+
+\newcommand\slidegrid[4]{
+    \color{#1}
+    \setcounter{gridoriz}{#3+1}
+    \setcounter{gridvert}{#4+1}
+    \setcounter{gridorizlen}{#3*#2}
+    \setcounter{gridvertlen}{#4*#2}
+    \multiput(0,0)(#2,0){\value{gridoriz}}{\line(0,1){\value{gridvertlen}}}
+    \multiput(0,0)(0,#2){\value{gridvert}}{\line(1,0){\value{gridorizlen}}}
+}
+
+\newcommand\includeimg[3]{\resizebox{#1}{#2}{\includegraphics{#3}}}
+
+\myframe{Cos'è la shell?}{frame:argomento}{
+  \setlength{\unitlength}{1.5mm}
+
+  \begin{picture}(60,20)(0,0)
+    \color{black}
+    \put(25,-4){\parbox{10\unitlength}{\centering hardware}}
+    \put(25,1){\parbox{10\unitlength}{\centering kernel}}
+      \qbezier(20,0)(20,5)(30,5)\qbezier(30,5)(40,5)(40,0)
+      \put(20,0){\line(1,0){20}}
+
+    \put(25,6){\parbox{10\unitlength}{\centering librerie}}
+      \qbezier(15,0)(15,10)(30,10)\qbezier(30,10)(45,10)(45,0)
+      \put(15,0){\line(1,0){30}}
+    
+    
+    \color{engred}\put(25,11){\parbox{10\unitlength}{\centering\bf shell}}
+      \qbezier(10,0)(10,15)(30,15)\qbezier(30,15)(50,15)(50,0)
+      \put(0,0){\line(1,0){60}}
+    
+
+      \put(5,5){\includeimg{5\unitlength}{!}{clipart/people_juliane_krug_07c.png}}
+      \put(8,9){\includeimg{5\unitlength}{!}{clipart/people_juliane_krug_07a.png}}
+      \put(12,12){\includeimg{5\unitlength}{!}{clipart/people_juliane_krug_08a.png}}
+      \put(16,14){\includeimg{5\unitlength}{!}{clipart/people_juliane_krug_08b.png}}
+
+      \put(50,5){\includeimg{5\unitlength}{!}{clipart/exec.png}}
+      \put(47,9){\includeimg{5\unitlength}{!}{clipart/exec.png}}
+      \put(43,12){\includeimg{5\unitlength}{!}{clipart/exec.png}}
+      \put(38,14){\includeimg{5\unitlength}{!}{clipart/exec.png}}
+
+  \end{picture}
+}
+
+%% \myframe{Cos'è la shell?}{frame:argomento}{
+%%   \setlength{\unitlength}{1.5mm}
+
+%%   \begin{picture}(60,30)(0,0)
+%%     %% \slidegrid{cyan}{1}{60}{40}
+%%     %% \slidegrid{magenta}{5}{12}{8}
+    
+%%     \color{black}
+
+%%     \put(5,16){\recttesto{50}{8}{shell}}
+%%     \put(5,0){\recttesto{22}{8}{interfaccia verso il sistema operativo}}
+%%     \put(33,0){\recttesto{22}{8}{linguaggio di programmazione}}
+
+%%     \put(12,12){\wiconbox{6mm}{clipart/download_manager.png}}
+%%     \put(40,12){\wiconbox{6mm}{clipart/download_manager.png}}
+
+%%   \end{picture}
+%% }
+
+\mysection{Le esigenze a cui il corso risponde}
+
+
+
+\myframe{Come è utilizzata la shell attualmente?}{frame:comeusata}{
+  \input{immaginitikz/shellcomeusata.tex}
+}
+
+
+  %% \begin{picture}(60,40)(0,0)
+  %%   \slidegrid{cyan}{1}{60}{40}
+  %%   \slidegrid{magenta}{5}{12}{8}
+    
+  %%   \color{engred}
+
+  %%   \put(10,4){\circle*{2}}
+  %%   \put(50,4){\circle*{1}}
+  %%   \put(10,28){\circle*{3}}
+  %%   \put(50,28){\circle*{10}}
+
+  %%   \color{black}
+
+  %%   \put(20,12){\recttesto{20}{8}{shell}}
+  %%   \put(0,0){\recttesto{20}{8}{attività sistemistiche}}
+  %%   \put(40,0){\recttesto{20}{8}{avvio di programmi}}
+  %%   \put(0,24){\recttesto{20}{8}{schedulazioni}}
+  %%   \put(40,24){\recttesto{20}{8}{esecuzione batch}}
+
+
+  %% \end{picture}
+
+
+
+\myframe{Come potrebbe essere utilizzata la shell?}{frame:comenonusata}{
+  \input{immaginitikz/shellcomepotrebbe.tex}
+}
+
+\mysection{Destinatari}
+
+\myframe{Chi dovrebbe seguire questo corso?}{frame:destinatari}{
+  \input{immaginitikz/destinatari.tex}
+}
+
+\myframe{Prerequisiti}{frame:prerequisiti}{
+  \input{immaginitikz/prerequisiti.tex}
+}
+
+%\myframe{Casi d'uso delle conoscenze}{frame:casidestinatari}{}
+
+\mysection{Obbiettivi didattici}
+
+\myframe{Obbiettivi}{frame:obbiettivi}{
+  \input{immaginitikz/obbiettivi.tex}
+}
+
+\myframe{Conoscenze in uscita}{frame:conoscenze}{
+  \input{immaginitikz/conoscenze.tex}
+}
+
+
+\mysection{Metodologia didattica}
+
+\myframe{Programma didattico}{frame:programma}{
+  \input{immaginitikz/programma.tex}
+}
+
+
+\myframe{Tipi di modulo}{frame:modulo}{
+  \input{immaginitikz/tipomodulo.tex}
+}
+
+\myframe{Struttura di un modulo}{frame:struttura}{
+\vfill
+\begin{center}\begin{footnotesize}
+\begin{tabular}{|p{2cm}|p{2cm}|p{2cm}|p{2cm}|}
+\hline
+& {\bf modulo di teoria}&{\bf modulo di pratica}&{\bf caso di studio}\\
+& {\centering 20-30 min. }& {\centering 40-60 min. }& {\centering 60-120 min.} \\
+\hline
+{\it lezione frontale (10 min.)} & \multicolumn{2}{|c|}{lezione frontale} & esposizione del caso di studio\\
+\hline
+{\it esercitazione} & test a domande aperte, quiz, discussione, ...
+& esercizi di programmazione, test a domande aperte, quiz, lavori di gruppo, ...
+& progetto individuale o di gruppo sul caso di studio presentato\\
+\hline
+\end{tabular}
+\end{footnotesize}\end{center}
+\vfill
+}
+
+%% \myframe{Online o in presenza?}{frame:online}{
+%% I moduli possono essere usufruiti sia in aula che a distanza (o in combinazione). 
+
+%% Nel caso di  lezione in aula, le esercitazioni  potranno essere svolte
+%% in   modalità   individuale,  a   gruppi   o   collegiale  a   seconda
+%% dell'argomento e  dell'attitudine della classe. 
+
+%% Nel  caso di lezione  a distanza,  la lezione  frontale sarà  un breve
+%% video,  seguita  da   esercitazioni  svolte  individualmente.   
+
+%% Queste  esercitazioni   potranno  essere  seguite   dall'insegnante  o
+%% valutate in  modalità peer-reviewed, oppure  prevedere una discussione
+%% tramite  chat o  forum, a  seconda dell'argomento,  della  modalità di
+%% fruizione e svolgimento del corso e dell'attitudine dei partecipanti.
+
+%% Nel caso di corso in aula, ogni giornata tranne l'ultima prevederà uno
+%% o  due  moduli  teorici, cinque  o  sei  moduli  pratici e  un  modulo
+%% riepilogativo  finale. L'ultima  giornata  avrà tre  o quattro  moduli
+%% pratici e due moduli riepilogativi.
+
+%% Nel  caso di  corso a  distanza,  il partecipante  potrà scegliere  il
+%% proprio percorso, purché rispetti eventuali prerequisiti tra i moduli.
+%% }
+

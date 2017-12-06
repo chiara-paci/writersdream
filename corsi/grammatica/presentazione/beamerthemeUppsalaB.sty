@@ -1,0 +1,414 @@
+\ProvidesPackage{beamerthemeUppsalaB}[2007/04/04]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% Uppsala theme was designed by Frédéric Haziza <daz@it.uu.se>
+%% April 2008
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% -------------------------------------------------------------------
+%% Definitions, Options
+
+%% Should use the provided \logo
+\newif\ifbeamer@mylogo
+\beamer@mylogofalse
+\DeclareOptionBeamer{mylogo}{\beamer@mylogotrue}
+
+%% Options for the numbers
+\newif\ifbeamer@nonumbers
+\beamer@nonumbersfalse
+\DeclareOptionBeamer{nonumbers}{\beamer@nonumberstrue}
+
+\newif\ifbeamer@totalnumber
+\beamer@totalnumberfalse
+\DeclareOptionBeamer{totalnumber}{\beamer@totalnumbertrue}
+
+%% If you don't want the progression bar on the right
+\newif\ifbeamer@progressbar
+\beamer@progressbartrue
+\DeclareOptionBeamer{noprogressbar}{\beamer@progressbarfalse}
+
+%% If you still want the navigation
+\newif\ifbeamer@withnav
+\beamer@withnavfalse
+\DeclareOptionBeamer{withnav}{\beamer@withnavtrue}
+
+%% -------------------------------------------------------------------
+\ProcessOptionsBeamer
+
+
+%% -------------------------------------------------------------------
+%% Fonts
+\usefonttheme{Ferentino}
+
+%% -------------------------------------------------------------------
+%% Colors
+%\DeclareOptionBeamer{grey}[false]{\PassOptionsToPackage{grey=#1}{beamercolorthemeuu}}
+\usecolortheme{Ferentino}
+
+%% ----------------------------------------------------------------------
+\mode
+<beamer>
+
+% Copyright 2003 by Till Tantau     <tantau@users.sourceforge.net>
+%       and 2007 by Frédéric Haziza <daz@it.uu.se>
+%
+% This program can be redistributed and/or modified under the terms
+% of the GNU Public License, version 2.
+
+
+%% -------------------------------------------------------------------
+%% Defining the sidebar theme. Used as default too
+%% -------------------------------------------------------------------
+
+%% Section at top?
+\newif\ifbeamer@subsectionsattop
+\beamer@subsectionsattopfalse
+\DeclareOptionBeamer{subsectionsattop}{\beamer@subsectionsattoptrue}
+
+\newif\ifbeamer@sectionpathattop
+\beamer@sectionpathattopfalse
+\DeclareOptionBeamer{sectionpathattop}{\beamer@sectionpathattoptrue}
+
+%% Processing the options
+
+\DeclareOptionBeamer{hideothersubsections}{\PassOptionsToPackage{hideothersubsections=#1}{beamerouterthemesidebar}}
+\DeclareOptionBeamer{hideallsubsections}{\PassOptionsToPackage{hideallsubsections=#1}{beamerouterthemesidebar}}
+\ProcessOptionsBeamer
+
+\useoutertheme[hideothersubsections,right,height=2em,width=8em]{sidebar}
+\useinnertheme[shadow=true]{rounded} %\useinnertheme{rounded}
+
+\newdimen\beamer@mydim%
+\beamer@mydim=\paperwidth%
+\advance\beamer@mydim by-\beamer@sidebarwidth%
+
+%% =============================================================
+%% Redefining the head, with the UU logo
+\defbeamertemplate*{headline}{uu theme}
+{%
+  \begin{beamercolorbox}[wd=\beamer@sidebarwidth]{logo}
+    \usebeamercolor[bg]{logo}%
+    \vrule width\beamer@sidebarwidth height \beamer@headheight%
+    \hskip-\beamer@sidebarwidth%
+    \hbox to \beamer@sidebarwidth{\hss\vbox to%
+      \beamer@headheight{\vss\hbox{\color{fg}%
+          \ifbeamer@mylogo%
+          %% Should be the image file, not the include command
+          \pgfimage[width=\beamer@sidebarwidth,height=\beamer@headheight]{\insertlogo}%
+          \else%
+          \pgfimage[width=\beamer@sidebarwidth,height=\beamer@headheight]{UU_logo_vit_30}%uulogo_red160}%
+          \fi%
+        }\vss}\hss}%
+  \end{beamercolorbox}%
+  \vskip-\beamer@headheight%
+  \hskip\beamer@sidebarwidth%
+  %% If we want the subsections at the top
+  \ifbeamer@subsectionsattop
+  \insertsubsectionnavigationhorizontal{\beamer@mydim}{}{\hskip0pt plus1filll}
+  \vskip2ex%
+  \else
+  %% If we want the shorttitle>section>subsection at the top; 2ex high
+  \ifbeamer@sectionpathattop
+  \begin{beamercolorbox}[wd=\beamer@mydim,ht=2ex,dp=1ex,leftskip=1ex]{section in head/foot}%
+    {\usebeamerfont{title in head/foot}\usebeamercolor{title in head/foot}%
+      \insertshorttitle\strut}%
+    {\usebeamerfont{section in head/foot}\usebeamercolor{section in head/foot}%
+      \hspace*{1ex}\insertgotosymbol%~
+      \insertsectionhead}%
+    \ifx\insertsubsectionhead\@empty%
+    \else%
+    {\usebeamerfont{subsection in head/foot}\usebeamercolor{subsection in head/foot}
+      \insertgotosymbol%\hspace*{1ex}
+      \insertsubsectionhead}
+    \fi%
+  \end{beamercolorbox}%
+  \else%
+  \vskip2ex%
+  \fi%
+  \fi%
+}
+
+%% =============================================================
+\ifbeamer@subsectionsattop
+%% Redefining the look and feel of the (sub)sections
+\defbeamertemplate*{subsection in head/foot}{uu theme}
+{%
+  \underline{\insertsubsectionhead}
+}
+%% FIXME: shading not properly working
+\defbeamertemplate*{subsection in head/foot shaded}{uu theme}
+{%
+  \setbeamertemplate{subsection in head/foot shaded}[default][20]
+  \insertsubsectionhead
+}
+\fi
+
+%% =============================================================
+\newdimen\beamer@mytitleheight%
+\beamer@mytitleheight=\beamer@headheight%
+%\ifbeamer@sectionattop\advance\beamer@mytitleheight by-2ex\fi
+\advance\beamer@mytitleheight by-2ex%
+%% Strange way to code, but seems to work, so I keep the hack
+
+%% FIXME: Should not be there
+\setbeamercolor*{frametitle}{parent=title}
+%\setbeamercolor*{frametitle}{parent=title,fg=uured,bg=white}
+
+%% Redefining the frametitle
+\defbeamertemplate*{frametitle}{uu theme}
+{%
+  \nointerlineskip%
+  \vbox to \beamer@mytitleheight{%
+    \leftskip=-\beamer@leftmargin%
+    \advance\leftskip by0.3cm%
+    \rightskip=-\beamer@rightmargin%
+    \advance\rightskip by0.3cm plus1fil%
+    %% Roulement de tambour: here comes the title
+    \vfil%
+    % I don't want to use any \strut here
+    {\usebeamercolor[fg]{frametitle}\usebeamerfont{frametitle}\insertframetitle\par}%
+    {\usebeamercolor[fg]{framesubtitle}\usebeamerfont{framesubtitle}\insertframesubtitle\par}%
+%     \vbox{}%
+%     \vskip-1.5em%
+    \vfil%
+    %% Adding the bar
+    {\hrule width 0.6\paperwidth}%
+  }%
+}%
+
+
+%% =============================================================
+%% Sidebar
+
+%% Vertical shading
+%\setbeamertemplate{sidebar canvas left}[vertical shading] 
+%[top=uured,bottom=structure.bg]
+
+%\defbeamertemplate*{sidebar right}{uu theme}
+\defbeamertemplate*{sidebar left}{uu theme}
+{%
+  \vskip\beamer@headheight%
+  \vskip4em%
+  \insertverticalnavigation{\beamer@sidebarwidth}%
+  \vfill%
+}%
+
+%% =============================================================
+%% Progression bar on the right
+\ifbeamer@progressbar
+\usepackage{calc}
+\setbeamersize{sidebar width right=2pt}
+\newlength{\myprogbarlength}
+\defbeamertemplate*{sidebar canvas right}{uu theme}
+{%
+  \vskip-2ex%starting at the top of the paper
+  \setlength{\myprogbarlength}{\paperheight*(\insertframenumber)/(\inserttotalframenumber)}
+  \usebeamercolor[bg]{sidebar canvas right}
+  {\hrule width 2pt height \myprogbarlength}
+}
+\fi
+
+%% =============================================================
+%% Margins
+%\setbeamersize{text margin left=0.5cm,text margin right=0.5cm}
+
+%% =============================================================
+%% Redefining the footline
+\defbeamertemplate*{footline}{uu theme}
+{%
+  \leavevmode%
+  \hbox{%
+    \begin{beamercolorbox}[wd=\beamer@sidebarwidth,ht=2ex,dp=1ex,center]{date in head/foot}%
+      \usebeamerfont{date in head/foot}\insertshortdate%
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=\beamer@mydim,ht=2ex,dp=1ex,leftskip=1ex,rightskip=1ex]{institute in head/foot}%
+      {\usebeamerfont{institute in head/foot}\insertshortinstitute}%
+      {\ifbeamer@nonumbers\else\hfill%
+        \usebeamerfont{page number in head/foot}%
+        -\ \insertframenumber\ifbeamer@totalnumber/\inserttotalframenumber\fi\ -%
+        \fi}%
+      {\hfill\usebeamerfont{author in head/foot}\insertshortauthor}%
+    \end{beamercolorbox}%
+  }%
+  \vskip0pt%
+}
+
+
+%% \input{uu-main.tex}
+
+%% ----------------------------------------------------------------------
+\mode
+<handout>
+
+
+%%\input{uu-handout.tex}
+
+%% Based on Frankfurt theme
+\useoutertheme[subsection=false]{smoothbars}
+\useinnertheme[shadow=true]{rounded}
+
+%\setbeamerfont{block title}{size={}}
+
+\defbeamertemplate*{sidebar right}{uu theme}
+{%
+  \vfill%
+%
+  \begin{picture}(0,0)%
+    \setlength{\unitlength}{1cm}% default
+    \protect\put(0,0){%
+      \begin{picture}(6,6)(4,6)%
+	\pgfimage[width=0.7\paperwidth]{uppsala_logo}%
+      \end{picture}%
+    }%
+  \end{picture}%
+  \vskip2pt%
+  %% No navigation
+  %\llap{\usebeamertemplate***{navigation symbols}\hskip0.1cm}%
+  %\hskip0.1cm
+  %\vskip2pt%
+}
+
+
+\setbeamertemplate{footline}{
+  \begin{beamercolorbox}[ignorebg,wd=\paperwidth,ht=2.25ex,dp=1ex,leftskip=.1cm,rightskip=.1cm plus1fill]{title in head/foot}%
+    %% Page number?
+    \ifbeamer@nonumbers%
+    \else
+    \usebeamerfont{page number in head/foot}%
+    \tikz[baseline=(X.base)] \node [ellipse,draw,inner ysep=0.5pt,inner xsep=2pt] (X) {%
+      \insertframenumber\ifbeamer@totalnumber/\inserttotalframenumber\fi};
+    \fi%
+    \usebeamerfont{title in head/foot}%
+    \insertshortdate{~\color{red}|}~\insertshorttitle%
+    \ifx\insertsubtitle\@empty%
+    \else%
+    ~(\usebeamerfont{subtitle in head/foot}\insertsubtitle)%
+    \fi%  
+  \end{beamercolorbox}
+}
+
+
+%% ----------------------------------------------------------------------
+\mode
+<trans>
+%%\input{uu-trans.tex}
+
+%% -------------------------------------------
+%% Designed for the Trans mode
+%% -------------------------------------------
+\useinnertheme[shadow=true]{rounded}
+
+\defbeamertemplate*{frametitle}{uu theme}[1][center]{%
+%
+  \ifbeamercolorempty[bg]{frametitle}{}{\nointerlineskip}%
+  \@tempdima=\textwidth%
+  \advance\@tempdima by\beamer@leftmargin%
+  \advance\@tempdima by\beamer@rightmargin%
+%  
+  \begin{beamercolorbox}[sep=0.3cm,#1,wd=\the\@tempdima]{frametitle}%
+    \usebeamerfont{frametitle}%
+    \vbox{}\vskip-1ex%
+    \strut\insertframetitle\strut\par%
+    {%
+      \ifx\insertframesubtitle\@empty%
+      \else%
+      {\usebeamerfont{framesubtitle}\usebeamercolor[fg]{framesubtitle}\insertframesubtitle\strut\par}%
+      \fi%
+    }%
+  \end{beamercolorbox}%
+  %
+  %% Adding the bar only if there is a title
+  \ifx\insertframetitle\@empty%
+  \else%
+  {\hrule width \textwidth}%
+  \fi%
+}
+
+
+
+
+%% ----------------------------------------------------------------------
+%% Common stuff, used in all themes
+\mode
+<all>
+
+
+%%\input{uu-all.tex}
+
+%% -------------------------------------------
+%% General stuff used in all modes
+%% -------------------------------------------
+\mode
+<all>
+
+%% -------------------------------------------
+%% No navigation, thanks
+%% -------------------------------------------
+\ifbeamer@withnav%
+%% \usebeamertemplate{navigation symbols}[vertical]
+\else%
+\setbeamertemplate{navigation symbols}{}%
+\fi%
+
+%% -------------------------------------------
+%% Logo & Title Page
+%% -------------------------------------------
+
+\defbeamertemplate*{title page}{uu theme}
+{%
+  %\leavevmode
+  %% Logo ?
+  \begin{picture}(0,0)%
+    \setlength{\unitlength}{1cm}% default
+    \protect\put(0,0){%
+      \begin{picture}(6,6)(4,10)%
+	%\includegraphics[width=0.8\paperwidth]{uppsala_logo}
+	
+	%\pgfdeclareimage[height=50mm,width=50mm]{uu_logo}{uppsala_logo}
+	%\pgfuseimage{uu_logo}
+	\pgfimage[width=0.7\paperwidth]{uppsala_logo}%
+      \end{picture}%
+    }%
+  \end{picture}%
+  \vfill%
+  \raggedleft%
+  %% Title
+  {\usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle\par}%
+  {%% Subtitle
+    \ifx\insertsubtitle\@empty%
+    \else%
+    \usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle%\par
+    \fi%  
+  }   
+  \vskip 5mm
+  %% Horizontal line
+  {\usebeamercolor[fg]{title}\hrule height 2pt\hfill}
+  \vskip 5mm
+  %% Author
+  {\usebeamercolor{author}\usebeamerfont{author}\insertauthor}
+  \vskip 1cm
+  %% Institute
+  {\usebeamercolor{institute}\usebeamerfont{institute}\insertinstitute}
+  \vskip 1cm
+  %% Date
+  {\usebeamercolor{date}\usebeamerfont{date}\insertdate}
+  \vfill%
+}
+
+%% --------------------------------------------------
+%% Bullets
+%% --------------------------------------------------
+
+\setbeamertemplate{items}[square]
+
+%\defbeamertemplate*{itemize item}{uu theme}{$\Rightarrow$}
+
+%\setbeamertemplate{itemize subitem}[ball]
+\setbeamertemplate{itemize subitem}[circle]
+\setbeamertemplate{itemize subsubitem}[triangle]
+
+%% \setbeamertemplate{enumerate item}{\insertenumlabel}
+%% \setbeamertemplate{enumerate subitem}{\insertenumlabel.\insertsubenumlabel}
+%% \setbeamertemplate{enumerate subsubitem}{\insertenumlabel.\insertsubenumlabel.\insertsubsubenumlabel}

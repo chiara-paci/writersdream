@@ -1,0 +1,76 @@
+\usepackage[italian]{babel}
+
+\mode
+<presentation>
+{
+  \usetheme{Ferentino}
+  \setbeamercovered{transparent}
+}
+
+\mode
+<all>
+
+\mytitle{La shell di Unix e Linux}{La shell di Unix e Linux}{}
+
+\myauthor{Chiara Paci}
+
+\myinstitute{SCUOLA DI FORMAZIONE ICT\\``Enrico della Valle''}
+
+\def\myplace{Ferentino}
+
+\date{\today}
+%\date{20 gennaio 2015}
+
+\pgfdeclareimage[height=0.8cm]{plogo}{mini-turtle}
+\logo{\pgfuseimage{plogo}}
+
+\def\banner{banner-zhang.png}
+
+% Delete this, if you do not want the table of contents to pop up at
+% the beginning of each subsection:
+%% \AtBeginSection[]{
+%%   \begin{frame}<beamer>
+%%     \frametitle{Indice}
+%%     \tableofcontents[sectionstyle=show/shaded,subsectionstyle=hide/hide/hide]
+%%   \end{frame}
+%% }
+
+\mode
+<all>
+
+\begin{document}
+
+\openpresentazionenotoc
+
+\mode
+<all>
+
+\input{lesson_introduzione}
+\input{lesson_shell}
+\input{lesson_shell_esercizi}
+\input{lesson_conclusione}
+
+%% \mode
+%% <article>
+
+%%\biblioarticleonly{shell01}
+
+%% \clearpage
+%% \section{Bibliografia}
+
+%% \bibliographystyle{appunti}
+
+%% \begin{btSect}{shell01}
+%% \btPrintAll
+%% \end{btSect}
+
+%% \mode
+%% <all>
+
+%\input{sez_altro}
+
+\end{document}
+
+
+
+
