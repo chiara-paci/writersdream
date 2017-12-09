@@ -1,0 +1,19 @@
+girone:giornata:partita:squadra 1:squadra 2
+A:1:1:Living Stones:I Bananari
+A:1:2:Gli scrittori del quartierino:Armata Brancaleone
+A:2:1:Living Stones:Gli scrittori del quartierino
+A:2:2:I Bananari:Armata Brancaleone
+A:3:1:Living Stones:Armata Brancaleone
+A:3:2:I Bananari:Gli scrittori del quartierino
+B:1:1:Green House:Retroguardia Trash
+B:1:2:the 3 BrOthers:(riposo)
+B:2:1:Green House:the 3 BrOthers
+B:2:2:Retroguardia Trash:(riposo)
+B:3:1:Green House:(riposo)
+B:3:2:Retroguardia Trash:the 3 BrOthers
+C:1:1:D Euforiche:La threesome
+C:1:2:Le TreMende:(riposo)
+C:2:1:D Euforiche:Le TreMende
+C:2:2:La threesome:(riposo)
+C:3:1:D Euforiche:(riposo)
+C:3:2:La threesome:Le TreMende
