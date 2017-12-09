@@ -12,3 +12,4 @@ __pycache__
 *~
 ipb_database/
 **/*Auto*
+**/.ipynb_checkpoints/
