@@ -4,6 +4,7 @@ import httplib2
 import os
 import os.path
 import collections
+import pandas
 
 from apiclient import discovery
 from oauth2client import client
@@ -235,7 +236,7 @@ class Spreadsheet(object):
         result = self.values.batchGet(spreadsheetId=self.spreadsheetId, 
                                       majorDimension="ROWS",
                                       ranges=rangedef).execute()
-        values = result.get("valueRanges")[0]["values"]
+        values=result.get("valueRanges")[0]["values"]
         return values
 
     def _clear_sheet(self,rangedef):
@@ -418,6 +419,8 @@ class Spreadsheet(object):
             }]
         }
 
+#############
+
 class SetGiornataSheet(object):
     def __init__(self,spreadsheet,sheet_names):
         self._ss=spreadsheet
@@ -445,7 +448,7 @@ class SetGiornataSheet(object):
             len_H+=len(s_list)
         return H,len_H
 
-    def _headers(self,sheet,gironi):
+    def _headers(self,sheet,giornata,accoppiamenti,gironi,old_data):
         H,len_H=self._h_gironi(gironi)
 
         dati_base=["girone","partita","squadra","goal partita","capitano",
@@ -521,7 +524,30 @@ class SetGiornataSheet(object):
 
         return headers,req_list
 
-    def _data(self,sheet,gironi,accoppiamenti,num_cols,h_rows=3):
+    def _set_titolare(self,R,r,r_big,H,old_data,titolare):
+        formula_penalita='=-5'
+        formula_penalita+='+if(K%d<=8000,1,0)'
+        formula_penalita+='+countif(L%d:O%d,"?*")'
+        R[r][7]=titolare
+        R[r][9]="=sum(P%d:Z%d)" % (r_big+r+1,r_big+r+1)
+        R[r][15]=formula_penalita % (r_big+r+1,r_big+r+1,r_big+r+1)
+
+        if old_data is None: return
+        R[r][6]=old_data.loc[titolare]["base","ingresso riserva"]
+        R[r][8]=old_data.loc[titolare]["base","titolo"]
+
+        verifiche=["lunghezza","tag","link","link commento","commento valido"]
+        for n in range(len(verifiche)):
+            R[r][10+n]=old_data.loc[titolare]["verifiche",verifiche[n]]
+
+        n=16
+        for girone,s_list in H:
+            for squadra in s_list:
+                R[r][n]=old_data.loc[titolare][girone,squadra]
+                n+=1
+
+    def _data(self,sheet,num_cols,giornata,accoppiamenti,gironi,old_data):
+        h_rows=3
         H,len_H=self._h_gironi(gironi)
         start_H=num_cols-len_H
 
@@ -568,14 +594,11 @@ class SetGiornataSheet(object):
                     R[r][2]=sq["squadra"]
                     R[r][4]=sq["capitano"]
                     R[r][5]=sq["riserva"]
-                    R[r][7]=sq["match 1"]
-                    R[r+1][7]=sq["match 2"]
-                    R[r][9]="=sum(P%d:Z%d)" % (r_big+r+1,r_big+r+1)
-                    R[r+1][9]="=sum(P%d:Z%d)" % (r_big+r+2,r_big+r+2)
-                    R[r][3]="=J%d+J%d" % (r_big+r+1,r_big+r+2)
 
-                    R[r][15]=formula_penalita % (r_big+r+1,r_big+r+1,r_big+r+1)
-                    R[r+1][15]=formula_penalita % (r_big+r+2,r_big+r+2,r_big+r+2)
+                    self._set_titolare(R,r,r_big,H,old_data,sq["match 1"])
+                    self._set_titolare(R,r+1,r_big,H,old_data,sq["match 2"])
+
+                    R[r][3]="=J%d+J%d" % (r_big+r+1,r_big+r+2)
 
                     req_list+=[
                         self._ss._req_merge(sheet,r_big+r,r_big+r+1,2,2),
@@ -628,13 +651,25 @@ class SetGiornataSheet(object):
 
         return data,req_list
 
+    def _general_requests(self,sheet,num_rows,num_cols):
+        req_list=[
+            self._ss._req_autoresize_columns(sheet,0,num_cols-1),
+            self._ss._req_resize_rows(sheet,3,num_rows-1,30),
+            self._ss._req_resize_columns(sheet,0,1,30),
+            self._ss._req_resize_columns(sheet,11,num_cols-1,30),
+            self._ss._req_resize_columns(sheet,8,8,500),
+            self._ss._req_resize_columns(sheet,3,3,60),
+            self._ss._req_resize_columns(sheet,9,9,60),
+            self._ss._req_resize_columns(sheet,10,10,60),
+        ]
+        return req_list
 
-    def __call__(self,giornata,accoppiamenti,gironi): 
+    def __call__(self,giornata,accoppiamenti,gironi,old_data): 
         sheet=self._names[giornata-1]
 
-        headers,req_headers=self._headers(sheet,gironi)
+        headers,req_headers=self._headers(sheet,giornata,accoppiamenti,gironi,old_data)
         num_cols=len(headers[0])
-        data,req_data=self._data(sheet,gironi,accoppiamenti,num_cols)
+        data,req_data=self._data(sheet,num_cols,giornata,accoppiamenti,gironi,old_data)
         D=headers+data
         num_rows=len(D)
 
@@ -646,34 +681,7 @@ class SetGiornataSheet(object):
         ]
         req_list+=req_headers
         req_list+=req_data
-        req_list+=[
-            self._ss._req_autoresize_columns(sheet,0,num_cols-1),
-
-
-            self._ss._req_resize_rows(sheet,3,num_rows-1,30),
-            self._ss._req_resize_columns(sheet,0,1,30),
-            self._ss._req_resize_columns(sheet,11,num_cols-1,30),
-            self._ss._req_resize_columns(sheet,8,8,500),
-            self._ss._req_resize_columns(sheet,3,3,60),
-            self._ss._req_resize_columns(sheet,9,9,60),
-            self._ss._req_resize_columns(sheet,10,10,60),
-            {
-                "updateSheetProperties": {
-                    "properties": {
-                        "sheetId": self._ss.sheets_id[sheet],
-                        "gridProperties": {
-                            "frozenRowCount": 3,
-                            "frozenColumnCount": 3
-                        }
-                    },
-                    "fields": "gridProperties.frozenRowCount,gridProperties.frozenColumnCount"
-                }
-            },
-
-        ]
-
-
-
+        req_list+=self._general_requests(sheet,num_rows,num_cols)
 
         body={
             "requests": req_list,
@@ -1169,5 +1177,38 @@ class N2017Spreadsheet(Spreadsheet):
 
         result = self.spreadsheets.batchUpdate(spreadsheetId=self.spreadsheetId,body=body).execute()
 
+    def get_giornata(self,giornata):
+        sheet=self.giornate[giornata-1]
+        
+        try:
+            g=self._get_data(sheet+'!G:ZZ')
+        except KeyError as e:
+            return None
 
-    #def set_giornata(self,giornata,accoppiamenti,gironi): pass
+        T=[]
+        for n in range(4):
+            T.append(("base",g[0][n]))
+        for n in range(4,10):
+            T.append(("verifiche",g[2][n]))
+        girone=""    
+        for n in range(10,len(g[2])):
+            if len(g[1])>n and g[1][n]:
+                girone=g[1][n].replace("Girone","").strip()
+            T.append((girone,g[2][n]))
+        tindex=pandas.MultiIndex.from_tuples(T)
+
+        D=[]
+        for r in g[3:]:
+            if len(r)==len(g[2]):
+                D.append(r)
+                continue
+            for n in range(len(r),len(g[2])):
+                r.append("")
+            D.append(r)
+
+        d=pandas.DataFrame(D,columns=tindex)
+        d=d.set_index([("base","titolari")])
+        d.index.names=["titolare"]
+        d=d.drop([("verifiche","penalità"),("base","goal match")],axis=1)
+        return d
+
