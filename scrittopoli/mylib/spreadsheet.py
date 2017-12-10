@@ -1,6 +1,9 @@
+# -*- coding: utf-8 -*-
+
 import httplib2
 import os
 import os.path
+import collections
 
 from apiclient import discovery
 from oauth2client import client
@@ -158,11 +161,13 @@ class Spreadsheet(object):
     
     bold_text={
         "foregroundColor": black,
+        "fontFamily": "Courier New",
         "fontSize": 10,
         "bold": True
     }
 
     normal_text={
+        "fontFamily": "Courier New",
         "foregroundColor": black,
         "fontSize": 10,
         "bold": False
@@ -275,17 +280,35 @@ class Spreadsheet(object):
         }
         return { "autoResizeDimensions": req }
 
-    # def _req_autoresize_cols(self,sheet,col_s,col_e):
-    #     return {
-    #         "autoResizeDimensions": {
-    #             "dimensions": {
-    #                 "startIndex": col_s,
-    #                 "endIndex": col_e+1,
-    #                 "sheetId": self.sheets_id[sheet],
-    #                 "dimension": "COLUMNS",
-    #             }
-    #         }
-    #     }
+    def _req_resize_columns(self,sheet,col_s,col_e,pixels):
+        req={
+            "range": {
+                "sheetId": self.sheets_id[sheet],
+                "dimension": "COLUMNS",
+                "startIndex": col_s,
+                "endIndex": col_e+1,
+            },
+            "properties": {
+                "pixelSize": pixels
+            },
+            "fields": "pixelSize"
+        }
+        return { "updateDimensionProperties": req }
+
+    def _req_resize_rows(self,sheet,row_s,row_e,pixels):
+        req={
+            "range": {
+                "sheetId": self.sheets_id[sheet],
+                "dimension": "ROWS",
+                "startIndex": row_s,
+                "endIndex": row_e+1,
+            },
+            "properties": {
+                "pixelSize": pixels
+            },
+            "fields": "pixelSize"
+        }
+        return { "updateDimensionProperties": req }
 
 
     def _req_border(self,sheet,row_s,row_e,col_s,col_e,**kwargs):
@@ -312,10 +335,6 @@ class Spreadsheet(object):
                     update[key]=kwargs[label]
         return { "updateBorders": update }
 
-    def _req_format(self,sheet,row_s,row_e,col_s,col_e,cell_format):
-        c_range=self._c_range(sheet,row_s,row_e,col_s,col_e)
-        return self._req_style(c_range,cell_format)
-
     def _req_style(self,c_range,cell_format):
         fields=",".join(list(cell_format.keys()))
         ret={
@@ -329,6 +348,10 @@ class Spreadsheet(object):
         }
         return ret
 
+    def _req_format(self,sheet,row_s,row_e,col_s,col_e,cell_format):
+        c_range=self._c_range(sheet,row_s,row_e,col_s,col_e)
+        return self._req_style(c_range,cell_format)
+
     def _req_alignment(self,sheet,row_s,row_e,col_s,col_e,
                        vertical="TOP",horizontal="LEFT"):
         c_range=self._c_range(sheet,row_s,row_e,col_s,col_e)
@@ -338,7 +361,6 @@ class Spreadsheet(object):
         }
 
         return self._req_style(c_range,cell_format)
-
 
     def _req_delete_conditional_format(self,sheet,rule_id):
         req={
@@ -385,10 +407,289 @@ class Spreadsheet(object):
     def _req_clear_colors(self,sheet,row_s,row_e,col_s,col_e):
         return self._req_colors(sheet,row_s,row_e,col_s,col_e,background=self.white)
 
+    def _req_body_data(self,sheet,data,first_cell="a1"):
+        return {
+            #"valueInputOption": "RAW",
+            "valueInputOption": "USER_ENTERED",
+            "data": [{
+                "values": data,
+                "majorDimension": "ROWS",
+                "range": "%s!%s" % (sheet,first_cell)
+            }]
+        }
 
+class SetGiornataSheet(object):
+    def __init__(self,spreadsheet,sheet_names):
+        self._ss=spreadsheet
+        self._names=sheet_names
+
+        self.black_line={
+            "style": "SOLID",
+            "width": 3,
+            "color": self._ss.black,
+        }
+
+        self.gray_line={
+            "style": "SOLID",
+            "width": 1,
+            "color": self._ss.gray,
+        }
+
+
+    def _h_gironi(self,gironi):
+        H=[]
+        len_H=0
+        for girone in gironi.columns:
+            s_list=list(gironi[gironi[girone]!="(riposo)"][girone])
+            H.append( (girone,s_list) )
+            len_H+=len(s_list)
+        return H,len_H
+
+    def _headers(self,sheet,gironi):
+        H,len_H=self._h_gironi(gironi)
+
+        dati_base=["girone","partita","squadra","goal partita","capitano",
+                   "riserva","ingresso riserva","titolari","titolo","goal match"]
+        verifiche=["lunghezza","tag","link","link commento","commento valido","penalità"]
+        
+        len_D=len(dati_base)
+        len_V=len(verifiche)
+
+        num_cols=len_D+len_V+len_H
+        num_rows=3
+
+        headers=[ ["" for c in range(num_cols) ] for r in range(num_rows) ] 
+        req_list=[]
+
+        for c in range(len_D):
+            headers[0][c]=dati_base[c]
+            req_list.append(self._ss._req_merge(sheet,0,2,c,c))
+
+        headers[0][len_D]="verifiche e penalità" 
+        req_list.append(self._ss._req_merge(sheet,0,1,len_D,len_D+len_V-1))
+
+        for c in range(len_V):
+            headers[2][len_D+c]=verifiche[c]
+
+        headers[0][len_D+len_V]="voti"
+        req_list+=[
+            self._ss._req_merge(sheet,0,0,len_D+len_V,num_cols-1),
+            self._ss._req_border(sheet,0,0,len_D+len_V,num_cols-1,
+                                 inner=self.black_line,outer=self.black_line),
+        ]
+
+        c=len_D+len_V
+        for girone,s_list in H:
+            headers[1][c]="Girone "+girone
+            req_list+=[
+                self._ss._req_merge(sheet,1,1,c,c+len(s_list)-1),
+                self._ss._req_border(sheet,1,2,c,c+len(s_list)-1,
+                                     inner=self.gray_line,outer=self.black_line),
+            ]
+            for squadra in s_list:
+                headers[2][c]=squadra
+                c=c+1
+
+
+        h_format={
+            "backgroundColor": self._ss.red,
+            "verticalAlignment": "BOTTOM",
+            "horizontalAlignment": "CENTER",
+            "textFormat": self._ss.bold_text,
+        }
+
+        r_format=h_format.copy()
+        r_format["textRotation"]= {
+            "angle": 90,
+        }
+
+
+        req_list+=[
+            self._ss._req_format(sheet,0,2,          0,            1,r_format),
+            self._ss._req_format(sheet,0,2,          2,            2,h_format),
+            self._ss._req_format(sheet,0,2,          3,            3,r_format),
+            self._ss._req_format(sheet,0,2,          4,      len_D-1,h_format),
+            self._ss._req_format(sheet,0,1,len_D,   num_cols-1,h_format),
+            self._ss._req_format(sheet,2,2,len_D,   num_cols-1,r_format),
+
+            self._ss._req_border(sheet,0,2,0,9,
+                                 inner=self.gray_line,outer=self.black_line),
+            self._ss._req_border(sheet,0,2,10,15,
+                                 inner=self.gray_line,outer=self.black_line),
+
+        ]
+
+        return headers,req_list
+
+    def _data(self,sheet,gironi,accoppiamenti,num_cols,h_rows=3):
+        H,len_H=self._h_gironi(gironi)
+        start_H=num_cols-len_H
+
+        partite=collections.OrderedDict()
+        for girone,partita in accoppiamenti.index.unique():
+            if girone not in partite: partite[girone]=[]
+            partite[girone].append(partita)
+        partite=list(partite.items())
+
+        formula_penalita='=-5'
+        formula_penalita+='+if(K%d<=8000,1,0)'
+        formula_penalita+='+countif(L%d:O%d,"?*")'
+
+        t_format={
+            #"backgroundColor": self._ss.red,
+            "verticalAlignment": "MIDDLE",
+            "horizontalAlignment": "LEFT",
+            "textFormat": self._ss.normal_text,
+        }
+
+        c_format=t_format.copy()
+        c_format["horizontalAlignment"]= "CENTER"
+
+        d_format=t_format.copy()
+        d_format["numberFormat"]={
+            "type": "DATE",
+            "pattern": "dd/mm hh:mm"
+        }
+
+        data=[]
+        req_list=[]
+        r_big=h_rows
+        for girone,p_list in partite:
+            nr=4*len(p_list)
+            R=[ ["" for c in range(num_cols) ] for r in range(nr) ]
+            R[0][0]=girone
+
+            r=0
+            for partita in p_list:
+                R[r][1]=partita
+                req_list.append(self._ss._req_merge(sheet,r_big+r,r_big+r+3,1,1))
+                for n in [0,1]:
+                    sq=accoppiamenti.loc[girone,partita].iloc[n]
+                    R[r][2]=sq["squadra"]
+                    R[r][4]=sq["capitano"]
+                    R[r][5]=sq["riserva"]
+                    R[r][7]=sq["match 1"]
+                    R[r+1][7]=sq["match 2"]
+                    R[r][9]="=sum(P%d:Z%d)" % (r_big+r+1,r_big+r+1)
+                    R[r+1][9]="=sum(P%d:Z%d)" % (r_big+r+2,r_big+r+2)
+                    R[r][3]="=J%d+J%d" % (r_big+r+1,r_big+r+2)
+
+                    R[r][15]=formula_penalita % (r_big+r+1,r_big+r+1,r_big+r+1)
+                    R[r+1][15]=formula_penalita % (r_big+r+2,r_big+r+2,r_big+r+2)
+
+                    req_list+=[
+                        self._ss._req_merge(sheet,r_big+r,r_big+r+1,2,2),
+                        self._ss._req_merge(sheet,r_big+r,r_big+r+1,3,3),
+                        self._ss._req_merge(sheet,r_big+r,r_big+r+1,4,4),
+                        self._ss._req_merge(sheet,r_big+r,r_big+r+1,5,5),
+                    ]
+
+                    r+=2
+            req_list+=[
+                self._ss._req_merge(sheet,r_big,r_big+nr-1,0,0),
+                self._ss._req_border(sheet,r_big,r_big+nr-1,0,9,
+                                     inner=self.gray_line,outer=self.black_line),
+                self._ss._req_border(sheet,r_big,r_big+nr-1,10,15,
+                                     inner=self.gray_line,outer=self.black_line),
+            ]
+
+            c=start_H
+            for g_col,s_list in H:
+                nc=len(s_list)
+                if g_col!=girone:
+                    req_list.append(self._ss._req_border(sheet,r_big,r_big+nr-1,c,c+nc-1,
+                                                         inner=self.gray_line,outer=self.black_line))
+                    c+=nc
+                    continue
+                req_list+=[
+                    self._ss._req_border(sheet,r_big,r_big+nr-1,c,c+nc-1,
+                                         inner=self.gray_line,outer=self.black_line),
+                    self._ss._req_colors(sheet,r_big,r_big+nr-1,c,c+nc-1,
+                                         background=self._ss.gray), #,text_format=c_format),
+                ]
+                c+=nc
+                continue
+
+            data+=R
+            r_big+=nr
+
+
+        num_rows=h_rows+len(data)
+
+        req_list+=[
+            self._ss._req_format(sheet,h_rows,num_rows-1,0,1,c_format),
+            self._ss._req_format(sheet,h_rows,num_rows-1,2,2,t_format),
+            self._ss._req_format(sheet,h_rows,num_rows-1,3,3,c_format),
+            self._ss._req_format(sheet,h_rows,num_rows-1,4,5,c_format),
+            self._ss._req_format(sheet,h_rows,num_rows-1,6,6,d_format),
+            self._ss._req_format(sheet,h_rows,num_rows-1,7,8,t_format),
+            self._ss._req_format(sheet,h_rows,num_rows-1,9,num_cols-1,c_format),
+        ]
+
+        return data,req_list
+
+
+    def __call__(self,giornata,accoppiamenti,gironi): 
+        sheet=self._names[giornata-1]
+
+        headers,req_headers=self._headers(sheet,gironi)
+        num_cols=len(headers[0])
+        data,req_data=self._data(sheet,gironi,accoppiamenti,num_cols)
+        D=headers+data
+        num_rows=len(D)
+
+        body=self._ss._req_body_data(sheet,D)
+        result = self._ss._batch_update_values(body)
+
+        req_list=[
+            self._ss._req_unmerge(sheet,0,2*num_rows,0,2*num_cols),
+        ]
+        req_list+=req_headers
+        req_list+=req_data
+        req_list+=[
+            self._ss._req_autoresize_columns(sheet,0,num_cols-1),
+
+
+            self._ss._req_resize_rows(sheet,3,num_rows-1,30),
+            self._ss._req_resize_columns(sheet,0,1,30),
+            self._ss._req_resize_columns(sheet,11,num_cols-1,30),
+            self._ss._req_resize_columns(sheet,8,8,500),
+            self._ss._req_resize_columns(sheet,3,3,60),
+            self._ss._req_resize_columns(sheet,9,9,60),
+            self._ss._req_resize_columns(sheet,10,10,60),
+            {
+                "updateSheetProperties": {
+                    "properties": {
+                        "sheetId": self._ss.sheets_id[sheet],
+                        "gridProperties": {
+                            "frozenRowCount": 3,
+                            "frozenColumnCount": 3
+                        }
+                    },
+                    "fields": "gridProperties.frozenRowCount,gridProperties.frozenColumnCount"
+                }
+            },
+
+        ]
+
+
+
+
+        body={
+            "requests": req_list,
+        }
+
+        result = self._ss._batch_update_spreadsheets(body)
 
 class N2017Spreadsheet(Spreadsheet):
     spreadsheetId = '1dWyk3L8xJiT303LqL9fg4gqmIIGr29rCVHwqaIHeXTA'
+
+    def _batch_update_values(self,body):
+        return self.values.batchUpdate(spreadsheetId=self.spreadsheetId,body=body).execute()
+
+    def _batch_update_spreadsheets(self,body):
+        return self.spreadsheets.batchUpdate(spreadsheetId=self.spreadsheetId,body=body).execute()
+        
 
     gray={
         "blue": 0.75,
@@ -416,19 +717,18 @@ class N2017Spreadsheet(Spreadsheet):
     ranking_generale="Ranking generale"
     ranking_giocatori="Ranking giocatori"
     ranking_squadre="Ranking squadre"
-
     elo_squadre="Elo squadre"
     elo_giocatori="Elo giocatori"
 
-    def _req_body_data(self,sheet,data,first_cell="a1"):
-        return {
-            "valueInputOption": "RAW", #USER_ENTERED
-            "data": [{
-                "values": data,
-                "majorDimension": "ROWS",
-                "range": "%s!%s" % (sheet,first_cell)
-            }]
-        }
+    giornate=[
+        "Prima giornata",
+        "Seconda giornata",
+        "Terza giornata"
+    ]
+
+    def __init__(self):
+        Spreadsheet.__init__(self)
+        self.set_giornata=SetGiornataSheet(self,self.giornate)
 
     def set_calendario(self,labels,data):
         header=["giornata","girone","partita","squadra 1","squadra 2"]
@@ -844,12 +1144,11 @@ class N2017Spreadsheet(Spreadsheet):
         num_rows=1+len(data)
         num_cols=2+len(labels)
 
+
         req_list=[
             self._req_border(self.elo_squadre,0,num_rows-1,0,num_cols-1,
                              inner=self.black_line,outer=self.black_line),
             self._req_format(self.elo_squadre,0,0,0,num_cols-1,h_format),
-
-
             self._req_autoresize_columns(self.elo_squadre,0,num_cols-1),
             self._req_conditional_format(self.elo_squadre,1,num_rows-1,3,num_cols-1,"=d2=0",dis_format),
             self._req_unmerge(self.elo_squadre,0,2*num_rows,0,2*num_cols),
@@ -869,3 +1168,6 @@ class N2017Spreadsheet(Spreadsheet):
         }
 
         result = self.spreadsheets.batchUpdate(spreadsheetId=self.spreadsheetId,body=body).execute()
+
+
+    #def set_giornata(self,giornata,accoppiamenti,gironi): pass
