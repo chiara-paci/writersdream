@@ -582,7 +582,7 @@ class SetGiornataSheet(object):
         r_big=h_rows
         for girone,p_list in partite:
             nr=4*len(p_list)
-            R=[ ["" for c in range(num_cols) ] for r in range(nr) ]
+            R=[ ["" for c in range(0,16) ]+[ 0 for c in range(16,num_cols) ] for r in range(nr) ]
             R[0][0]=girone
 
             r=0
@@ -1209,6 +1209,6 @@ class N2017Spreadsheet(Spreadsheet):
         d=pandas.DataFrame(D,columns=tindex)
         d=d.set_index([("base","titolari")])
         d.index.names=["titolare"]
-        d=d.drop([("verifiche","penalità"),("base","goal match")],axis=1)
+        d=d.drop([("base","goal match")],axis=1)
         return d
 
