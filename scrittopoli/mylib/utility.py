@@ -1,4 +1,6 @@
 import numpy
+import random
+import string
 
 def cell_val(val):
     if type(val) is int:
@@ -57,3 +59,32 @@ def to_table_html_multi(df):
         print("</tr>")
 
     print("</table>")
+
+def random_title(x):
+    size=random.randint(10,20)
+    chars=string.ascii_lowercase +string.ascii_uppercase + string.digits
+    chars+="               "
+    S=''.join(random.choice(chars) for _ in range(size))
+    S=S.strip()
+    S=" ".join(S.split())
+    return S
+
+def random_len(x):
+    return random.randint(300,8200)
+
+def random_riserva(x):
+    if random.choice([True,False]):
+        return ""
+    return "12-08 23:23"
+
+def random_verifica(x):
+    if random.choice([True,False,True,True,True,True,True,True,True,True,True]):
+        return "x"
+    return ""
+
+def calc_penalita_lungh(x):
+    return -int(x>8000)
+
+def calc_penalita(x):
+    if x: return 0
+    return -1

@@ -689,6 +689,110 @@ class SetGiornataSheet(object):
 
         result = self._ss._batch_update_spreadsheets(body)
 
+
+class SetFormazioniSheet(object):
+    def __init__(self,spreadsheet,sheet_names):
+        self._ss=spreadsheet
+        self._names=sheet_names
+
+        self.black_line={
+            "style": "SOLID",
+            "width": 1,
+            "color": self._ss.black,
+        }
+
+    def _headers(self,sheet,giornata,riposano,squadre,old_data):
+        headers=["squadra","riposa","capitano","riserva","titolare 1","titolare 2"]
+        num_cols=len(headers)
+
+        h_format={
+            "backgroundColor": self._ss.green,
+            "verticalAlignment": "BOTTOM",
+            "horizontalAlignment": "CENTER",
+            "textFormat": self._ss.bold_text,
+        }
+
+        req_list=[
+            self._ss._req_border(sheet,0,0,0,num_cols-1,
+                                 inner=self.black_line,outer=self.black_line),
+            self._ss._req_format(sheet,0,0,0,num_cols-1,h_format),
+        ]
+
+        return [headers],req_list
+
+    def _data(self,sheet,num_cols,giornata,riposano,squadre,old_data):
+        data=[]
+        req_list=[]
+        ind_riposano=[]
+
+        for sq in squadre:
+            R=[ sq ] + [ "" for c in range(1,num_cols) ]
+            if sq in riposano:
+                ind_riposano.append(len(data))
+                R[1]="(riposa)"
+            if old_data is None:
+                data.append(R)
+                continue
+            R[2]=old_data.loc[sq]["capitano"]
+            R[3]=old_data.loc[sq]["riserva"]
+            R[4]=old_data.loc[sq]["titolare 1"]
+            R[5]=old_data.loc[sq]["titolare 2"]
+            data.append(R)
+
+        num_rows=len(data)
+
+        t_format={
+            #"backgroundColor": self._ss.red,
+            "verticalAlignment": "MIDDLE",
+            "horizontalAlignment": "LEFT",
+            "textFormat": self._ss.normal_text,
+        }
+
+        r_format=t_format.copy()
+        r_format["backgroundColor"]= self._ss.gray
+
+        req_list+=[
+            self._ss._req_border(sheet,1,num_rows,0,num_cols-1,
+                                 inner=self.black_line,outer=self.black_line),
+            self._ss._req_format(sheet,1,num_rows,0,num_cols-1,t_format),
+        ]
+
+        for r in ind_riposano:
+            req_list.append(self._ss._req_format(sheet,r+1,r+1,0,num_cols-1,r_format))
+
+        return data,req_list
+
+    def _general_requests(self,sheet,num_rows,num_cols):
+        req_list=[
+            self._ss._req_autoresize_columns(sheet,0,num_cols-1),
+        ]
+        return req_list
+
+    def __call__(self,giornata,riposano,squadre,old_data): 
+        sheet=self._names[giornata-1]
+
+        headers,req_headers=self._headers(sheet,giornata,riposano,squadre,old_data)
+        num_cols=len(headers[0])
+        data,req_data=self._data(sheet,num_cols,giornata,riposano,squadre,old_data)
+        D=headers+data
+        num_rows=len(D)
+
+        body=self._ss._req_body_data(sheet,D)
+        result = self._ss._batch_update_values(body)
+
+        req_list=[
+            self._ss._req_unmerge(sheet,0,2*num_rows,0,2*num_cols),
+        ]
+        req_list+=req_headers
+        req_list+=req_data
+        req_list+=self._general_requests(sheet,num_rows,num_cols)
+
+        body={
+            "requests": req_list,
+        }
+
+        result = self._ss._batch_update_spreadsheets(body)
+
 class N2017Spreadsheet(Spreadsheet):
     spreadsheetId = '1dWyk3L8xJiT303LqL9fg4gqmIIGr29rCVHwqaIHeXTA'
 
@@ -731,12 +835,25 @@ class N2017Spreadsheet(Spreadsheet):
     giornate=[
         "Prima giornata",
         "Seconda giornata",
-        "Terza giornata"
+        "Terza giornata",
+        "Quarti di finale",
+        "Semifinali",
+        "Finali",
+    ]
+
+    formazioni=[
+        "Formazioni prima giornata",
+        "Formazioni seconda giornata",
+        "Formazioni terza giornata"
+        "Formazioni quarti di finale",
+        "Formazioni semifinali",
+        "Formazioni finali",
     ]
 
     def __init__(self):
         Spreadsheet.__init__(self)
         self.set_giornata=SetGiornataSheet(self,self.giornate)
+        self.set_formazioni=SetFormazioniSheet(self,self.formazioni)
 
     def set_calendario(self,labels,data):
         header=["giornata","girone","partita","squadra 1","squadra 2"]
@@ -1210,5 +1327,27 @@ class N2017Spreadsheet(Spreadsheet):
         d=d.set_index([("base","titolari")])
         d.index.names=["titolare"]
         d=d.drop([("base","goal match")],axis=1)
+        return d
+
+    def get_formazioni(self,giornata):
+        sheet=self.formazioni[giornata-1]
+        
+        try:
+            g=self._get_data(sheet+'!A:ZZ')
+        except KeyError as e:
+            return None
+
+        T=g[0]
+        D=[]
+        for r in g[1:]:
+            if len(r)==len(g[0]):
+                D.append(r)
+                continue
+            for n in range(len(r),len(g[0])):
+                r.append("")
+            D.append(r)
+
+        d=pandas.DataFrame(D,columns=T)
+        d=d.set_index(["squadra"])
         return d
 
