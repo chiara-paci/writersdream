@@ -22,7 +22,7 @@ def nuovi_ranking(rank_a,rank_b,goal_a,goal_b,K=40):
     
 def parametri_giornata(giornata,calendario,elo):
     rank=elo.copy().reset_index().set_index("giocatore")["rank %d" % (giornata-1)]
-    cal=calendario[calendario["squadra 2"]!="(riposo)"].loc[1]
+    cal=calendario[calendario["squadra 2"]!="(riposo)"].loc[giornata]
     return cal,rank
 
 def sort_by_rank(rank,a,b):

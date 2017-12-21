@@ -1,12 +1,12 @@
 girone,squadra,punti,vittorie,pareggi,sconfitte,differenza reti,goal fatti,goal subiti,differenza reti netta,goal netti fatti,goal netti subiti,penalità fatte,penalità subite
-A,La threesome,3,1,0,0,2,15,13,2,17,15,-2,-2
+A,D Euforiche,3,1,0,0,13,22,9,12,22,10,0,-1
 A,Gli ultimi,0,0,0,0,0,0,0,0,0,0,0,0
-A,D Euforiche,0,0,0,1,-2,13,15,-2,15,17,-2,-2
-B,Green House,3,1,0,0,10,18,8,8,18,10,0,-2
-B,Gli scrittori del quartierino,3,1,0,0,6,17,11,6,17,11,0,0
-B,the 3 BrOthers,0,0,0,1,-6,11,17,-6,11,17,0,0
-B,I Bananari,0,0,0,1,-10,8,18,-8,10,18,-2,0
-C,Living Stones,3,1,0,0,10,18,8,10,19,9,-1,-1
-C,Armata Brancaleone,3,1,0,0,2,15,13,2,15,13,0,0
-C,Le TreMende,0,0,0,1,-2,13,15,-2,13,15,0,0
-C,Retroguardia Trash,0,0,0,1,-10,8,18,-10,9,19,-1,-1
+A,La threesome,0,0,0,1,-13,9,22,-12,10,22,-1,0
+B,Gli scrittori del quartierino,3,1,0,0,8,17,9,8,18,10,-1,-1
+B,Green House,1,0,1,0,0,13,13,0,14,14,-1,-1
+B,I Bananari,1,0,1,0,0,13,13,0,14,14,-1,-1
+B,the 3 BrOthers,0,0,0,1,-8,9,17,-8,10,18,-1,-1
+C,Le TreMende,3,1,0,0,5,16,11,4,16,12,0,-1
+C,Living Stones,3,1,0,0,4,15,11,2,15,13,0,-2
+C,Retroguardia Trash,0,0,0,1,-4,11,15,-2,13,15,-2,0
+C,Armata Brancaleone,0,0,0,1,-5,11,16,-4,12,16,-1,0
