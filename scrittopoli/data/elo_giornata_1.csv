@@ -1,21 +1,34 @@
-giocatore,girone,squadra,avversario,goal fatti,goal subiti,elo precedente,elo avversario,punteggio atteso,punteggio reale,scostamento,elo nuovo
-queffe,A,D Euforiche,Luna,12,3,1500,1500,0.5,0.8,0.30000000000000004,1518
-Vincenzo Iennaco,C,Living Stones,AlexComan,11,3,1500,1500,0.5,0.7857142857142857,0.2857142857142857,1517
-Thea,C,Le TreMende,Skorpiòs,10,3,1500,1500,0.5,0.7692307692307693,0.2692307692307693,1516
-camparino,B,Gli scrittori del quartierino,AryaSophia,9,4,1500,1500,0.5,0.6923076923076923,0.1923076923076923,1511
-Andrea28,C,Retroguardia Trash,Ljuset,8,4,1500,1500,0.5,0.6666666666666666,0.16666666666666663,1510
-Marcello,A,D Euforiche,mina99,10,6,1500,1500,0.5,0.625,0.125,1507
-Marty12,B,Gli scrittori del quartierino,ITG,8,5,1500,1500,0.5,0.6153846153846154,0.11538461538461542,1507
-AdStr,C,Armata Brancaleone,Emy,8,6,1500,1500,0.5,0.5714285714285714,0.0714285714285714,1504
-Joyopi,B,Green House,simone volponi,7,6,1500,1500,0.5,0.5384615384615384,0.038461538461538436,1502
-Niko,B,I Bananari,Bango Skank,7,6,1500,1500,0.5,0.5384615384615384,0.038461538461538436,1502
-Bango Skank,B,Green House,Niko,6,7,1500,1500,0.5,0.46153846153846156,-0.038461538461538436,1498
-simone volponi,B,I Bananari,Joyopi,6,7,1500,1500,0.5,0.46153846153846156,-0.038461538461538436,1498
-Emy,C,Le TreMende,AdStr,6,8,1500,1500,0.5,0.42857142857142855,-0.07142857142857145,1496
-ITG,B,the 3 BrOthers,Marty12,5,8,1500,1500,0.5,0.38461538461538464,-0.11538461538461536,1493
-mina99,A,La threesome,Marcello,6,10,1500,1500,0.5,0.375,-0.125,1493
-Ljuset,C,Living Stones,Andrea28,4,8,1500,1500,0.5,0.3333333333333333,-0.16666666666666669,1490
-AryaSophia,B,the 3 BrOthers,camparino,4,9,1500,1500,0.5,0.3076923076923077,-0.1923076923076923,1489
-Skorpiòs,C,Armata Brancaleone,Thea,3,10,1500,1500,0.5,0.23076923076923078,-0.2692307692307692,1484
-AlexComan,C,Retroguardia Trash,Vincenzo Iennaco,3,11,1500,1500,0.5,0.21428571428571427,-0.2857142857142857,1483
-Luna,A,La threesome,queffe,3,12,1500,1500,0.5,0.2,-0.3,1482
+giocatore,squadra,girone,avversario,goal fatti,goal subiti,elo precedente,elo avversario,punteggio atteso,punteggio reale,scostamento,scostamento squadra,elo nuovo
+AdStr,Armata Brancaleone,C,(non giocato),0,0,1500,1500,0.5,0.5,0.0,0.1428571428571429,1504
+AlexComan,Retroguardia Trash,C,Vincenzo Iennaco,10,4,1500,1500,0.5,0.7142857142857143,0.2142857142857143,0.25,1522
+Andrea28,Retroguardia Trash,C,Macleo,11,3,1500,1500,0.5,0.7857142857142857,0.2857142857142857,0.25,1526
+AryaSophia,the 3 BrOthers,B,Federico72,0,14,1500,1500,0.5,0.0,-0.5,-0.07142857142857145,1465
+Bango Skank,Green House,B,massimopud,7,7,1500,1500,0.5,0.5,0.0,-0.07142857142857145,1498
+Ella F.,Armata Brancaleone,C,Emy,14,0,1500,1500,0.5,1.0,0.5,0.1428571428571429,1537
+Emy,Le TreMende,C,Ella F.,0,14,1500,1500,0.5,0.0,-0.5,-0.14285714285714285,1463
+Eudes,Retroguardia Trash,C,(non giocato),0,0,1500,1500,0.5,0.5,0.0,0.25,1507
+Federico72,Gli scrittori del quartierino,B,AryaSophia,14,0,1500,1500,0.5,1.0,0.5,0.0714285714285714,1535
+Ghigo,Gli ultimi,A,(non giocato),0,0,1500,1500,0.5,0.5,0.0,0.0,1500
+ITG,the 3 BrOthers,B,Marty12,12,2,1500,1500,0.5,0.8571428571428571,0.3571428571428571,-0.07142857142857145,1522
+Joyopi,Green House,B,simone volponi,5,9,1500,1500,0.5,0.35714285714285715,-0.14285714285714285,-0.07142857142857145,1488
+Komorebi,La threesome,A,Marcello,8,8,1500,1500,0.5,0.5,0.0,-0.15625,1495
+Kuno,D Euforiche,A,Luna,13,3,1500,1500,0.5,0.8125,0.3125,0.15625,1525
+Ljuset,Living Stones,C,(non giocato),0,0,1500,1500,0.5,0.5,0.0,-0.25,1493
+Luna,La threesome,A,Kuno,3,13,1500,1500,0.5,0.1875,-0.3125,-0.15625,1475
+Macleo,Living Stones,C,Andrea28,3,11,1500,1500,0.5,0.21428571428571427,-0.2857142857142857,-0.25,1474
+Marcello,D Euforiche,A,Komorebi,8,8,1500,1500,0.5,0.5,0.0,0.15625,1505
+Marty12,Gli scrittori del quartierino,B,ITG,2,12,1500,1500,0.5,0.14285714285714285,-0.35714285714285715,0.0714285714285714,1478
+Niko,I Bananari,B,(non giocato),0,0,1500,1500,0.5,0.5,0.0,0.0714285714285714,1502
+Plata,Green House,B,(non giocato),0,0,1500,1500,0.5,0.5,0.0,-0.07142857142857145,1498
+Skorpiòs,Armata Brancaleone,C,sefora,4,10,1500,1500,0.5,0.2857142857142857,-0.2142857142857143,0.1428571428571429,1490
+Thea,Le TreMende,C,(non giocato),0,0,1500,1500,0.5,0.5,0.0,-0.14285714285714285,1496
+Vincenzo Iennaco,Living Stones,C,AlexComan,4,10,1500,1500,0.5,0.2857142857142857,-0.2142857142857143,-0.25,1478
+caipiroska,Gli ultimi,A,(non giocato),0,0,1500,1500,0.5,0.5,0.0,0.0,1500
+camparino,Gli scrittori del quartierino,B,(non giocato),0,0,1500,1500,0.5,0.5,0.0,0.0714285714285714,1502
+crazycat,Gli ultimi,A,(non giocato),0,0,1500,1500,0.5,0.5,0.0,0.0,1500
+ettore70,the 3 BrOthers,B,(non giocato),0,0,1500,1500,0.5,0.5,0.0,-0.07142857142857145,1498
+massimopud,I Bananari,B,Bango Skank,7,7,1500,1500,0.5,0.5,0.0,0.0714285714285714,1502
+mina99,La threesome,A,(non giocato),0,0,1500,1500,0.5,0.5,0.0,-0.15625,1495
+queffe,D Euforiche,A,(non giocato),0,0,1500,1500,0.5,0.5,0.0,0.15625,1505
+sefora,Le TreMende,C,Skorpiòs,10,4,1500,1500,0.5,0.7142857142857143,0.2142857142857143,-0.14285714285714285,1510
+simone volponi,I Bananari,B,Joyopi,9,5,1500,1500,0.5,0.6428571428571429,0.1428571428571429,0.0714285714285714,1512

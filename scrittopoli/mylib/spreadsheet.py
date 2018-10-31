@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import httplib2shim
 import httplib2
 import os
 import os.path
@@ -199,9 +200,13 @@ class Spreadsheet(object):
             print('Storing credentials to ' + credential_path)
         return credentials
     
-    def __init__(self):
+    def __init__(self,proxy=""):
         credentials = self.get_credentials()
-        http = credentials.authorize(httplib2.Http())
+        if proxy:
+            pi = httplib2.proxy_info_from_url(proxy)
+            http=httplib2shim.Http(proxy_info=pi)
+        else:
+            http = credentials.authorize(httplib2shim.Http())
         discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?'
                         'version=v4')
         self.service = discovery.build('sheets', 'v4', http=http,
@@ -529,7 +534,7 @@ class SetGiornataSheet(object):
         formula_penalita+='+if(K%d<=8000,1,0)'
         formula_penalita+='+countif(L%d:O%d,"?*")'
         R[r][7]=titolare
-        R[r][9]="=sum(P%d:Z%d)" % (r_big+r+1,r_big+r+1)
+        R[r][9]="=sum(P%d:AA%d)" % (r_big+r+1,r_big+r+1)
         R[r][15]=formula_penalita % (r_big+r+1,r_big+r+1,r_big+r+1)
 
         if old_data is None: return
@@ -557,10 +562,6 @@ class SetGiornataSheet(object):
             partite[girone].append(partita)
         partite=list(partite.items())
 
-        formula_penalita='=-5'
-        formula_penalita+='+if(K%d<=8000,1,0)'
-        formula_penalita+='+countif(L%d:O%d,"?*")'
-
         t_format={
             #"backgroundColor": self._ss.red,
             "verticalAlignment": "MIDDLE",
@@ -580,9 +581,10 @@ class SetGiornataSheet(object):
         data=[]
         req_list=[]
         r_big=h_rows
+
         for girone,p_list in partite:
             nr=4*len(p_list)
-            R=[ ["" for c in range(0,16) ]+[ 0 for c in range(16,num_cols) ] for r in range(nr) ]
+            R=[ ["" for c in range(0,16) ]+[ "" for c in range(16,num_cols) ] for r in range(nr) ]
             R[0][0]=girone
 
             r=0
@@ -670,6 +672,279 @@ class SetGiornataSheet(object):
         headers,req_headers=self._headers(sheet,giornata,accoppiamenti,gironi,old_data)
         num_cols=len(headers[0])
         data,req_data=self._data(sheet,num_cols,giornata,accoppiamenti,gironi,old_data)
+        D=headers+data
+        num_rows=len(D)
+
+        body=self._ss._req_body_data(sheet,D)
+        result = self._ss._batch_update_values(body)
+
+        req_list=[
+            self._ss._req_unmerge(sheet,0,2*num_rows,0,2*num_cols),
+        ]
+        req_list+=req_headers
+        req_list+=req_data
+        req_list+=self._general_requests(sheet,num_rows,num_cols)
+
+        body={
+            "requests": req_list,
+        }
+
+        result = self._ss._batch_update_spreadsheets(body)
+
+
+class SetGiornataFinaliSheet(object):
+    def __init__(self,spreadsheet,sheet_names):
+        self._ss=spreadsheet
+        self._names=sheet_names
+
+        self.black_line={
+            "style": "SOLID",
+            "width": 3,
+            "color": self._ss.black,
+        }
+
+        self.gray_line={
+            "style": "SOLID",
+            "width": 1,
+            "color": self._ss.gray,
+        }
+
+
+    # ok
+    def _h_gironi(self,squadre_in_gioco,altre_squadre):
+        H=[]
+        len_H=0
+        for partita in squadre_in_gioco.index.unique():
+            s_list=list(squadre_in_gioco.loc[partita]["squadra"])
+            H.append( (partita,s_list) )
+            len_H+=len(s_list)
+        H.append( ("non qualificate",altre_squadre) )
+        len_H+=len(altre_squadre)
+        return H,len_H
+
+    # ok
+    def _headers(self,sheet,giornata,accoppiamenti,squadre_in_gioco,altre_squadre,old_data):
+        H,len_H=self._h_gironi(squadre_in_gioco,altre_squadre)
+
+        dati_base=["partita","squadra","goal partita","capitano",
+                   "riserva","ingresso riserva","titolari","titolo","goal match"]
+        verifiche=["lunghezza","tag","link","link commento","commento valido","penalità"]
+        
+        len_D=len(dati_base)
+        len_V=len(verifiche)
+
+        num_cols=len_D+len_V+len_H
+        num_rows=3
+
+        headers=[ ["" for c in range(num_cols) ] for r in range(num_rows) ] 
+        req_list=[]
+
+        for c in range(len_D):
+            headers[0][c]=dati_base[c]
+            req_list.append(self._ss._req_merge(sheet,0,2,c,c))
+
+        headers[0][len_D]="verifiche e penalità" 
+        req_list.append(self._ss._req_merge(sheet,0,1,len_D,len_D+len_V-1))
+
+        for c in range(len_V):
+            headers[2][len_D+c]=verifiche[c]
+
+        headers[0][len_D+len_V]="voti"
+        req_list+=[
+            self._ss._req_merge(sheet,0,0,len_D+len_V,num_cols-1),
+            self._ss._req_border(sheet,0,0,len_D+len_V,num_cols-1,
+                                 inner=self.black_line,outer=self.black_line),
+        ]
+
+        c=len_D+len_V
+        for partita,s_list in H:
+            headers[1][c]=partita
+            req_list+=[
+                self._ss._req_merge(sheet,1,1,c,c+len(s_list)-1),
+                self._ss._req_border(sheet,1,2,c,c+len(s_list)-1,
+                                     inner=self.gray_line,outer=self.black_line),
+            ]
+            for squadra in s_list:
+                headers[2][c]=squadra
+                c=c+1
+
+
+        h_format={
+            "backgroundColor": self._ss.red,
+            "verticalAlignment": "BOTTOM",
+            "horizontalAlignment": "CENTER",
+            "textFormat": self._ss.bold_text,
+        }
+
+        r_format=h_format.copy()
+        r_format["textRotation"]= {
+            "angle": 90,
+        }
+
+
+        req_list+=[
+            self._ss._req_format(sheet,0,2,          0,            0,r_format),
+            self._ss._req_format(sheet,0,2,          1,            1,h_format),
+            self._ss._req_format(sheet,0,2,          2,            2,r_format),
+            self._ss._req_format(sheet,0,2,          3,      len_D-2,h_format),
+            self._ss._req_format(sheet,0,2,    len_D-1,      len_D-1,r_format),
+            self._ss._req_format(sheet,0,1,      len_D,   num_cols-1,h_format),
+            self._ss._req_format(sheet,2,2,      len_D,   num_cols-1,r_format),
+
+            self._ss._req_border(sheet,0,2,0,8,
+                                 inner=self.gray_line,outer=self.black_line),
+            self._ss._req_border(sheet,0,2,9,14,
+                                 inner=self.gray_line,outer=self.black_line),
+
+        ]
+
+        return headers,req_list
+
+    # ok
+    def _set_titolare(self,R,r,r_big,H,old_data,titolare):
+        formula_penalita='=-5'
+        formula_penalita+='+if(J%d<=8000,1,0)'
+        formula_penalita+='+countif(K%d:N%d,"?*")'
+        R[r][6]=titolare
+        R[r][8]="=sum(O%d:Z%d)" % (r_big+r+1,r_big+r+1)
+        R[r][14]=formula_penalita % (r_big+r+1,r_big+r+1,r_big+r+1)
+
+        if old_data is None: return
+        R[r][5]=old_data.loc[titolare]["base","ingresso riserva"]
+        R[r][7]=old_data.loc[titolare]["base","titolo"]
+
+        verifiche=["lunghezza","tag","link","link commento","commento valido"]
+        for n in range(len(verifiche)):
+            R[r][9+n]=old_data.loc[titolare]["verifiche",verifiche[n]]
+
+        n=15
+        for girone,s_list in H:
+            for squadra in s_list:
+                R[r][n]=old_data.loc[titolare][girone,squadra]
+                n+=1
+
+    def _data(self,sheet,num_cols,giornata,accoppiamenti,squadre_in_gioco,altre_squadre,old_data):
+        h_rows=3
+        H,len_H=self._h_gironi(squadre_in_gioco,altre_squadre)
+        start_H=num_cols-len_H
+
+        # partite=collections.OrderedDict()
+        # for girone,partita in accoppiamenti.index.unique():
+        #     if girone not in partite: partite[girone]=[]
+        #     partite[girone].append(partita)
+        # partite=list(partite.items())
+
+        partite=list(accoppiamenti.index.unique())
+
+        t_format={
+            #"backgroundColor": self._ss.red,
+            "verticalAlignment": "MIDDLE",
+            "horizontalAlignment": "LEFT",
+            "textFormat": self._ss.normal_text,
+        }
+
+        c_format=t_format.copy()
+        c_format["horizontalAlignment"]= "CENTER"
+
+        d_format=t_format.copy()
+        d_format["numberFormat"]={
+            "type": "DATE",
+            "pattern": "dd/mm hh:mm"
+        }
+
+        data=[]
+        req_list=[]
+        r_big=h_rows
+
+        nr=4*len(partite)
+        R=[ ["" for c in range(0,15) ]+[ "" for c in range(15,num_cols) ] for r in range(nr) ]
+
+        r=0
+        for partita in partite:
+            R[r][0]=partita
+            req_list+=[
+                self._ss._req_merge(sheet,r_big+r,r_big+r+3,0,0),
+                self._ss._req_border(sheet,r_big+r,r_big+r+3,0,8,
+                                     inner=self.gray_line,outer=self.black_line),
+                self._ss._req_border(sheet,r_big+r,r_big+r+3,9,14,
+                                     inner=self.gray_line,outer=self.black_line),
+            ]
+            c=start_H
+            for p_col,s_list in H:
+                nc=len(s_list)
+                if p_col!=partita:
+                    req_list.append(self._ss._req_border(sheet,r_big+r,r_big+r+3,c,c+nc-1,
+                                                         inner=self.gray_line,outer=self.black_line))
+                    c+=nc
+                    continue
+                req_list+=[
+                    self._ss._req_border(sheet,r_big+r,r_big+r+3,c,c+nc-1,
+                                         inner=self.gray_line,outer=self.black_line),
+                    self._ss._req_colors(sheet,r_big+r,r_big+r+3,c,c+nc-1,
+                                         background=self._ss.gray), #,text_format=c_format),
+                ]
+                c+=nc
+                continue
+            for n in [0,1]:
+                sq=accoppiamenti.loc[partita].iloc[n]
+                R[r][1]=sq["squadra"]
+                R[r][3]=sq["capitano"]
+                R[r][4]=sq["riserva"]
+
+                self._set_titolare(R,r,r_big,H,old_data,sq["match 1"])
+                self._set_titolare(R,r+1,r_big,H,old_data,sq["match 2"])
+
+                R[r][2]="=I%d+I%d" % (r_big+r+1,r_big+r+2)
+
+                req_list+=[
+                    self._ss._req_merge(sheet,r_big+r,r_big+r+1,1,1),
+                    self._ss._req_merge(sheet,r_big+r,r_big+r+1,2,2),
+                    self._ss._req_merge(sheet,r_big+r,r_big+r+1,3,3),
+                    self._ss._req_merge(sheet,r_big+r,r_big+r+1,4,4),
+                ]
+                r+=2
+
+
+
+        data+=R
+        r_big+=nr
+
+
+        num_rows=h_rows+len(data)
+
+        req_list+=[
+            self._ss._req_format(sheet,h_rows,num_rows-1,0,0,c_format),
+            self._ss._req_format(sheet,h_rows,num_rows-1,1,1,t_format),
+            self._ss._req_format(sheet,h_rows,num_rows-1,2,2,c_format),
+            self._ss._req_format(sheet,h_rows,num_rows-1,3,4,c_format),
+            self._ss._req_format(sheet,h_rows,num_rows-1,5,5,d_format),
+            self._ss._req_format(sheet,h_rows,num_rows-1,6,7,t_format),
+            self._ss._req_format(sheet,h_rows,num_rows-1,8,num_cols-1,c_format),
+        ]
+
+        return data,req_list
+
+    # ok
+    def _general_requests(self,sheet,num_rows,num_cols):
+        req_list=[
+            self._ss._req_autoresize_columns(sheet,0,num_cols-1),
+            self._ss._req_resize_rows(sheet,3,num_rows-1,30),
+            self._ss._req_resize_columns(sheet,0,0,30),
+            self._ss._req_resize_columns(sheet,10,num_cols-1,30),
+            self._ss._req_resize_columns(sheet,7,7,500),
+            self._ss._req_resize_columns(sheet,2,2,60),
+            self._ss._req_resize_columns(sheet,8,8,60),
+            self._ss._req_resize_columns(sheet,9,9,60),
+        ]
+        return req_list
+
+    def __call__(self,giornata,accoppiamenti,squadre_in_gioco,altre_squadre,old_data): 
+        sheet=self._names[giornata-1]
+
+        headers,req_headers=self._headers(sheet,giornata,accoppiamenti,squadre_in_gioco,altre_squadre,old_data)
+        num_cols=len(headers[0])
+        data,req_data=self._data(sheet,num_cols,giornata,accoppiamenti,squadre_in_gioco,altre_squadre,old_data)
+
         D=headers+data
         num_rows=len(D)
 
@@ -844,7 +1119,7 @@ class N2017Spreadsheet(Spreadsheet):
     formazioni=[
         "Formazioni prima giornata",
         "Formazioni seconda giornata",
-        "Formazioni terza giornata"
+        "Formazioni terza giornata",
         "Formazioni quarti di finale",
         "Formazioni semifinali",
         "Formazioni finali",
@@ -853,6 +1128,7 @@ class N2017Spreadsheet(Spreadsheet):
     def __init__(self):
         Spreadsheet.__init__(self)
         self.set_giornata=SetGiornataSheet(self,self.giornate)
+        self.set_giornata_finali=SetGiornataFinaliSheet(self,self.giornate)
         self.set_formazioni=SetFormazioniSheet(self,self.formazioni)
 
     def set_calendario(self,labels,data):
@@ -1351,3 +1627,37 @@ class N2017Spreadsheet(Spreadsheet):
         d=d.set_index(["squadra"])
         return d
 
+    def get_giornata_finali(self,giornata):
+        sheet=self.giornate[giornata-1]
+        
+        try:
+            g=self._get_data(sheet+'!F:ZZ')
+        except KeyError as e:
+            return None
+
+        T=[]
+        for n in range(4):
+            T.append(("base",g[0][n]))
+        for n in range(4,10):
+            T.append(("verifiche",g[2][n]))
+        girone=""    
+        for n in range(10,len(g[2])):
+            if len(g[1])>n and g[1][n]:
+                girone=g[1][n].replace("Girone","").strip()
+            T.append((girone,g[2][n]))
+        tindex=pandas.MultiIndex.from_tuples(T)
+
+        D=[]
+        for r in g[3:]:
+            if len(r)==len(g[2]):
+                D.append(r)
+                continue
+            for n in range(len(r),len(g[2])):
+                r.append("")
+            D.append(r)
+
+        d=pandas.DataFrame(D,columns=tindex)
+        d=d.set_index([("base","titolari")])
+        d.index.names=["titolare"]
+        d=d.drop([("base","goal match")],axis=1)
+        return d

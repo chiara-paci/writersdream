@@ -9,6 +9,8 @@ def punteggi_attesi(rank_a,rank_b):
     return exp_a,exp_b
 
 def punteggi_reali(goal_a,goal_b):
+    if goal_a==goal_b:
+        return 0.5,0.5
     score_a=goal_a/(goal_a+goal_b)
     score_b=goal_b/(goal_a+goal_b)
     return score_a,score_b
@@ -48,4 +50,23 @@ def calcola_accoppiamenti(giornata,formazioni,calendario,elo_squadre):
                        columns=["girone","partita","squadra","capitano","riserva",
                                 "match 1","match 2"])
     X=X.set_index(["girone","partita"]).sort_index()
+    return X
+
+def calcola_accoppiamenti_finali(giornata,formazioni,calendario,elo):
+    rank=elo.copy().reset_index().set_index("giocatore")["rank %d" % (giornata-1)]
+
+    data=[]
+    for partita in calendario.index:
+        for n in [1,2]:
+            squadra=calendario.loc[partita]["squadra %d" % n]
+            riserva=formazioni.loc[squadra]["riserva"]
+            capitano=formazioni.loc[squadra]["capitano"]
+            titolare_1=formazioni.loc[squadra]["titolare 1"]
+            titolare_2=formazioni.loc[squadra]["titolare 2"]
+            data.append([partita,squadra,capitano,riserva]+sort_by_rank(rank,titolare_1,
+                                                                        titolare_2))    
+    X=pandas.DataFrame(data,
+                       columns=["partita","squadra","capitano","riserva",
+                                "match 1","match 2"])
+    X=X.set_index(["partita"]).sort_index()
     return X
